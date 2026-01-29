@@ -1,0 +1,4 @@
+RewriteCond %{HTTP_HOST} ^investacore.org$ [NC,OR]
+RewriteCond %{HTTP_HOST} ^www.investacore.org$
+RewriteCond %{REQUEST_URI} !public/
+RewriteRule (.*) /public/$1 [L]

@@ -3,7 +3,10 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -18,9 +21,17 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'pre_registration_id',
+        'mat_no',
         'email',
         'password',
+        'code',
+        'role',
+        'department',
+        'results_token',
+        'level',
+        'has_voted',
     ];
 
     /**
@@ -29,10 +40,29 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
+        
         'password',
         'remember_token',
     ];
 
+    public function preRegistration()
+    {
+        return $this->belongsTo(PreRegistration::class);
+    }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function hasVotedFor($position)
+    {
+        return $this->votes()->where('position', $position)->exists();
+    }
+
+    public function isAdmin(){
+        return $this->role === 'admin';
+    }
     /**
      * Get the attributes that should be cast.
      *
@@ -42,7 +72,10 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            
+            'ha_voted'=>'boolean',
+            'password'=>'hashed',
+            'role' => Role::class,
         ];
     }
 }
