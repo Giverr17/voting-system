@@ -26,6 +26,7 @@ class AddCandidate extends Controller
             'files' => $_FILES,
             'post' => $_POST,
         ]);
+        
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             try {
                 // Ensure directory exists

@@ -155,7 +155,6 @@
                             <option value="">Select a Level</option>
                             @php
                                 $levels = [
-                                    100,
                                     200,
                                     300,
                                     400,
