@@ -80,7 +80,7 @@
                                 </path>
                             </svg>
                             Upload New Photo
-                            <input type="file" value="{{ @old('image') }}" name="image" class="hidden"
+                            <input type="file" name="image" class="hidden"
                                 accept="image/*">
                         </label>
                         <p class="text-xs text-gray-500 mt-2">JPG, PNG or GIF (Max 2MB)</p>
