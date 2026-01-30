@@ -20,6 +20,12 @@ class AddCandidate extends Controller
     public function store(RequestsAddCandidate $request)
     {
 
+        dd([
+            'hasFile' => $request->hasFile('image'),
+            'file' => $request->file('image'),
+            'files' => $_FILES,
+            'post' => $_POST,
+        ]);
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             try {
                 // Ensure directory exists
