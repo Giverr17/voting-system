@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         //     return config('election.status') ==='open';
         // });
 
-        Model::preventLazyLoading();
+        // Model::preventLazyLoading();
         if (env('APP_ENV') !== 'local') {
             Schema::defaultStringLength(191);
         }

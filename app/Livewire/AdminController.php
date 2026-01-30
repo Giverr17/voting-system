@@ -74,18 +74,19 @@ protected $scrollToTop = false;
         $candidate->delete();
     }
 
-    public function verifyUsers($id)
-    {
-        $user = User::with('preRegistration')
-            ->where('id', $id)
-            ->whereHas('preRegistration', fn($q) =>
-            $q->where('status', PreRegistrationStatus::REGISTERED))
-            ->firstOrFail();
-
-        $user->preRegistration->update([
-            'status' => PreRegistrationStatus::APPROVED
-        ]);
-    }
+   public function verifyUsers($id)
+{
+    $user = User::with('preRegistration')
+        ->whereHas('preRegistration', function ($q) {
+            $q->where('status', PreRegistrationStatus::REGISTERED);
+        })
+        ->where('id', $id)
+        ->firstOrFail();
+        
+    $user->preRegistration->update([
+        'status' => PreRegistrationStatus::APPROVED
+    ]);
+}
 
     protected function getPreRegistrationQuery()
     {
