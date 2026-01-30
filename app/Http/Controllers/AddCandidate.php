@@ -26,7 +26,7 @@ class AddCandidate extends Controller
             'files' => $_FILES,
             'post' => $_POST,
         ]);
-        
+
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             try {
                 // Ensure directory exists
@@ -40,7 +40,7 @@ class AddCandidate extends Controller
                 // $image = $request->image->storeAs('candidate', time() . '_' . $request->image->getClientOriginalName(), 'public');
             } catch (\Exception $e) {
                 Log::error('Image upload failed: ' . $e->getMessage());
-                return back()->withErrors(['image' => 'Failed to upload image']);
+                return back()->withErrors(['image' => 'Image upload failed']);
             }
         }
 

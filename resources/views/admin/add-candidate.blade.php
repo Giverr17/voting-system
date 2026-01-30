@@ -39,7 +39,7 @@
             @endif
         </div>
         <!-- Form Body -->
-        <form action="{{ route('add-candidate') }}" method="POST" class="p-8" enctype="multipart/form-data">
+        <form action="{{ route('candidate-auth') }}" method="POST" class="p-8" enctype="multipart/form-data">
             @csrf
             <!-- Profile Photo Section -->
             <div class="mb-8">
