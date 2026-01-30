@@ -26,7 +26,7 @@ enum CandidatePosition: string
             self::FINANCIAL_SECRETARY => 'Financial Secretary ',
             self::ASSISTANT_SECRETARY_GENERAL => 'Assistant Secretary General',
             self::DIRECTOR_OF_SOCIALS => 'Director Of Socials',
-            self::DIRECTOR_OF_SPORTS => 'Director Of Socials',
+            self::DIRECTOR_OF_SPORTS => 'Director Of Sports',
             self::DIRECTOR_OF_WELFARE => 'Director Of Welfare',
             self::PUBLIC_RELATION_OFFICER => 'Public Relation Officer',
         };
