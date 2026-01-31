@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Laravel Queue Monitor Script (Fixed)
-LARAVEL_PATH="/home/nidccglo/mypow.app"
+LARAVEL_PATH="/home/nidccglo/aces-portal.com"
 QUEUE_CONNECTION="database"
 LOG_FILE="$LARAVEL_PATH/storage/logs/queue-monitor.log"
 PID_FILE="$LARAVEL_PATH/storage/logs/queue-worker.pid"
