@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 py-12 px-4">
     <div class="max-w-2xl mx-auto">
         <div class="bg-white rounded-2xl shadow-xl p-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Student Pre-Registration</h1>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Student Registration</h1>
             <p class="text-gray-600 mb-8 text-center">Complete your registration to access the voting system</p>
 
             @if (session()->has('success'))

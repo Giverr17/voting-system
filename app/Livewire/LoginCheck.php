@@ -92,6 +92,7 @@ class LoginCheck extends Component
         PreRegistration::where('mat_no', $this->mat_no)->update(['status' => PreRegistrationStatus::REGISTERED]);
 
         session()->flash('success', 'Registration completed successfully!');
+        return redirect()->route('welcome');
         $this->reset();
     }
 

@@ -27,30 +27,28 @@
                 @auth
                     <!-- Logged in users -->
                     <span class="text-gray-700">Welcome, {{ auth()->user()->username }}</span>
-                    
-                    @if(auth()->user()->role == \App\Enums\Role::ADMIN)
-                        <a href="{{ route('admin-index') }}" 
-                           class="text-gray-700 font-medium hover:text-blue-600 transition">
+
+                    @if (auth()->user()->role == \App\Enums\Role::ADMIN)
+                        <a href="{{ route('admin-index') }}"
+                            class="text-gray-700 font-medium hover:text-blue-600 transition">
                             Admin Dashboard
                         </a>
                     @else
-                        <a href="{{ route('vote-index') }}" 
-                           class="text-gray-700 font-medium hover:text-blue-600 transition">
+                        <a href="{{ route('vote-index') }}"
+                            class="text-gray-700 font-medium hover:text-blue-600 transition">
                             Vote
                         </a>
                     @endif
 
                     <form method="POST" action="{{ route('logout-auth') }}" class="inline">
                         @csrf
-                        <button type="submit" 
-                                class="text-gray-700 font-medium hover:text-blue-600 transition">
+                        <button type="submit" class="text-gray-700 font-medium hover:text-blue-600 transition">
                             Logout
                         </button>
                     </form>
                 @else
                     <!-- Guest users -->
-                    <a href="{{ route('login') }}" 
-                       class="text-gray-700 font-medium hover:text-blue-600 transition">
+                    <a href="{{ route('login') }}" class="text-gray-700 font-medium hover:text-blue-600 transition">
                         Login
                     </a>
 
@@ -64,7 +62,11 @@
         </div>
     </header>
 
-
+    @if (session()->has('success'))
+        <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            {{ session('success') }}
+        </div>
+    @endif
     <!-- Main Content -->
     <main class="flex-1 flex items-center justify-center px-4">
         <div class="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
@@ -84,7 +86,7 @@
             <!-- Action Buttons -->
             <div class="space-y-3">
                 @auth
-                    @if(auth()->user()->role == \App\Enums\Role::ADMIN)
+                    @if (auth()->user()->role == \App\Enums\Role::ADMIN)
                         <a href="{{ route('admin-index') }}"
                             class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
                             Go to Dashboard
