@@ -57,7 +57,7 @@
                 <div class="flex items-center gap-6">
                     {{-- <div class="relative">
                         <div
-                            class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+                            class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-pink-500 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                             AB
                         </div>
                         <button type="button"
@@ -111,7 +111,7 @@
                             Full Name <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="full_name" value="{{ @old('full_name') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="Enter candidate name">
                         @error('full_name')
                             <small class="text-danger text-sm text-red-500">{{ $message }}</small>
@@ -124,7 +124,7 @@
                             Matric Number <span class="text-red-500">*</span>
                         </label>
                         <input type="text" name="mat_no" value="{{ @old('mat_no') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="e.g., ENG2003456">
                         @error('mat_no')
                             <small class="text-danger text-sm text-red-500">{{ $message }}</small>
@@ -137,7 +137,7 @@
                             Department <span class="text-red-500">*</span>
                         </label>
                         <select name="department"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             <option selected>Computer Engineering</option>
                         </select>
                     </div>
@@ -151,7 +151,7 @@
                         </label>
                        
                           <select name="level"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             <option value="">Select a Level</option>
                             @php
                                 $levels = [
@@ -195,7 +195,7 @@
                             Position Running For <span class="text-red-500">*</span>
                         </label>
                         <select name="position_applied"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             <option value="">Select a position</option>
                           
                             @foreach ($positions as $position)
@@ -215,7 +215,7 @@
                             Campaign Slogan
                         </label>
                         <input type="text" name="slogan" value="{{ @old('slogan') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="Enter campaign slogan">
                         @error('slogan')
                             <small class="text-danger text-sm text-red-500">{{ $message }}</small>

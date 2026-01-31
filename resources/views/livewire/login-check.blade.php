@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gradient-to-br from-purple-100 to-blue-100 py-12 px-4">
+<div class="min-h-screen bg-gradient-to-br from-blue-100 to-black-100 py-12 px-4">
     <div class="max-w-2xl mx-auto">
         <div class="bg-white rounded-2xl shadow-xl p-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Student Registration</h1>
@@ -25,7 +25,7 @@
                         </label>
                         <input type="text" id="mat_no" wire:model.live="mat_no" wire:keydown.enter="checkMatNo"
                             placeholder="Enter your matriculation number"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('mat_no') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('mat_no') border-red-500 @else border-gray-300 @enderror"
                             required>
                         @error('mat_no')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -65,7 +65,7 @@
                         </label>
                         <input type="text" id="username" wire:model.live="username"
                             placeholder="Enter your username"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('username') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('username') border-red-500 @else border-gray-300 @enderror"
                             required>
                         @error('username')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -78,7 +78,7 @@
                             Email Address <span class="text-red-500">*</span>
                         </label>
                         <input type="email" id="email" wire:model.live="email" placeholder="example@email.com"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('email') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('email') border-red-500 @else border-gray-300 @enderror"
                             required>
                         @error('email')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -91,7 +91,7 @@
                             Department <span class="text-red-500">*</span>
                         </label>
                         <select id="department" wire:model.live="department"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('department') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('department') border-red-500 @else border-gray-300 @enderror"
                             required>
                             <option value="">Select your department</option>
 
@@ -109,7 +109,7 @@
                             Level <span class="text-red-500">*</span>
                         </label>
                         <select id="level" wire:model.live="level"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('level') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('level') border-red-500 @else border-gray-300 @enderror"
                             required>
                             <option value="">Select your level</option>
                             @foreach ($levels as $lvl)
