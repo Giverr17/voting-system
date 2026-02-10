@@ -3,9 +3,12 @@
 namespace App\Livewire;
 
 use App\Enums\PreRegistrationStatus;
+use App\Jobs\SendOtp as JobsSendOtp;
+use App\Mail\SendOTP;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 
 class Login extends Component
@@ -17,9 +20,16 @@ class Login extends Component
     public $isAdmin = false;
     public $showCodeField = false;
     public $errorMessage = '';
+    public $emailMessage = '';
 
     public function updatedIdentifier($value)
     {
+
+        $this->resetValidation();
+        $this->errorMessage = '';
+
+        $this->reset(['password', 'code', 'isAdmin', 'showCodeField']);
+
         $this->reset(['password', 'code', 'isAdmin', 'showCodeField']);
         $value = trim($value);
         if (empty($value)) {
@@ -60,23 +70,38 @@ class Login extends Component
         }
 
         if ($user->code) {
-            $this->code = $user->getRawOriginal('code') ?? $user->code;
+            // $this->code = $user->getRawOriginal('code') ?? $user->code;
             $this->showCodeField = true;
             $this->isAdmin = false;
             return;
         }
 
+        // $plainCode = strtoupper(substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 6));
+
+
+
+        $this->showCodeField = true;
+        $this->isAdmin = false;
+        // $this->code = $plainCode;
+        if (!$user->code) {
+            $this->sendOtp($user);
+        }
+    }
+
+    private function sendOtp($user)
+    {
+        if (!$user) return;
         $plainCode = strtoupper(substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 6));
 
         $user->update(['code' => $plainCode]);
-
-        $this->code = $plainCode;
-        $this->showCodeField = true;
-        $this->isAdmin = false;
+        JobsSendOtp::dispatch($user);
+        $this->emailMessage = 'OTP has been sent to your email';
     }
 
     public function login()
     {
+        $this->resetValidation();
+        $this->errorMessage = '';
 
         $this->errorMessage = '';
         $this->validate([
@@ -114,31 +139,30 @@ class Login extends Component
             ->with('preRegistration')
             ->first();
 
-            if (!$user) {
-                $this->addError('identifier', 'User not found');
-                return;
-            }
-    
-            if ($user->code !== $this->code) {
-                $this->addError('identifier', 'Invalid voting code');
-                return;
-            }
-    
-            // Final checks before login
-            if ($user->has_voted) {
-                $this->addError('identifier', 'You have already voted');
-                return;
-            }
-    
-            if (!$user->preRegistration || $user->preRegistration->status !== PreRegistrationStatus::APPROVED) {
-                $this->addError('identifier', 'Your registration is not approved');
-                return;
-            }
-    
-            // ✅ All good - login user
-            Auth::login($user);
-            session()->flash('success', 'Login successful!');
-            return redirect('/vote');
+        if (!$user) {
+            $this->addError('identifier', 'User not found');
+            return;
+        }
+
+        if ($user->code !== $this->code) {
+            $this->addError('identifier', 'Invalid voting code');
+            return;
+        }
+        // Final checks before login
+        if ($user->has_voted) {
+            $this->addError('identifier', 'You have already voted');
+            return;
+        }
+
+        if (!$user->preRegistration || $user->preRegistration->status !== PreRegistrationStatus::APPROVED) {
+            $this->addError('identifier', 'Your registration is not approved');
+            return;
+        }
+
+        // ✅ All good - login user
+        Auth::login($user);
+        session()->flash('success', 'Login successful!');
+        return redirect('/vote');
     }
 
 

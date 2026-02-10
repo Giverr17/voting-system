@@ -30,13 +30,14 @@ class AddCandidate extends FormRequest
             'department' => ['required', 'string'],
             'mat_no' => [
                 'required',
+                'size:10',
                 Rule::unique('candidates', 'mat_no')->ignore($this->route('id')),
             ],
             'level' => ['required'],
             'slogan' => ['required', 'string'],
-            'image' => $this->isMethod('put') || $this->isMethod('patch') 
-            ? 'nullable|image|mimes:jpeg,png,jpg|max:2048' 
-            : 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'image' => $this->isMethod('put') || $this->isMethod('patch')
+                ? 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+                : 'required|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 }
