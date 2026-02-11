@@ -143,7 +143,7 @@ class Voting extends Component
         $user->save();
 
         try {
-            Mail::to($user->email)->queue(new LiveResults($user));
+            Mail::to($user->email)->send(new LiveResults($user));
             $this->votingCompleted = true;
 
             $this->message = "Voting completed successfully!";
