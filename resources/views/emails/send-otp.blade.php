@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Election Results</title>
+    <title>OTP</title>
 </head>
 <body style="background-color:#f3f4f6; padding:40px; font-family:Arial, sans-serif;">
 
