@@ -10,16 +10,20 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LiveResults extends Mailable
+class LiveResults extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
+     * 
      */
+    public string $fromName;
+
+
     public function __construct(public User $user)
     {
-        
+        $this->fromName = config('app.name');
     }
 
     /**
@@ -28,6 +32,10 @@ class LiveResults extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new \Illuminate\Mail\Mailables\Address(
+                config('mail.from.address'),
+                $this->fromName  // ✅ Use stored value
+            ),
             subject: 'Live Results',
         );
     }
@@ -39,8 +47,8 @@ class LiveResults extends Mailable
     {
         return new Content(
             view: 'emails.live-result',
-            with:[
-                'link'=>route('results.show',$this->user->results_token)
+            with: [
+                'link' => route('results.show', $this->user->results_token)
             ]
         );
     }
