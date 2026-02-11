@@ -94,7 +94,7 @@ class Login extends Component
         $plainCode = strtoupper(substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 6));
 
         $user->update(['code' => $plainCode]);
-        JobsSendOtp::dispatch($user);
+               Mail::to($user->email)->queue(new SendOTP($user));
         $this->emailMessage = 'OTP has been sent to your email';
     }
 

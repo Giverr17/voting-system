@@ -42,8 +42,8 @@ class Voting extends Component
                 ->get();
         };
 
-         if(Auth::user()->has_voted){
-            $this->votingCompleted=true;
+        if (Auth::user()->has_voted) {
+            $this->votingCompleted = true;
         }
 
         $this->checkVotedPosition();
@@ -128,38 +128,37 @@ class Voting extends Component
             return;
         }
 
-       
-    
+
+
         if ($this->votingCompleted) {
-            return; 
+            return;
         }
-    
+
         $user = User::findOrFail(Auth::id());
         if (!$user->results_token) {
             $user->results_token = Str::uuid();
         }
-    
+
         $user->has_voted = true;
         $user->save();
-    
+
         try {
-            SendLiveResultsEmail::dispatch($user);
+            Mail::to($user->email)->queue(new LiveResults($user));
             $this->votingCompleted = true;
-    
+
             $this->message = "Voting completed successfully!";
             $this->messageType = 'success';
             $this->emailMessage = 'Please check your email to see the election result.';
-    
+
             Log::info('Email sent successfully to: ' . $user->email);
-    
         } catch (\Throwable $e) {
             $this->message = "Voting completed, but email failed to send.";
             $this->messageType = 'error';
-    
+
             Log::error('Email send failed: ' . $e->getMessage());
         }
     }
-    
+
     public function hasVotedForPosition($position)
     {
         return in_array($position, $this->votedPositions);
