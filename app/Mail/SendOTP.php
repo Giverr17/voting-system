@@ -11,7 +11,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SendOTP extends Mailable implements ShouldQueue // ✅ Add this!
+class SendOTP extends Mailable implements ShouldQueue 
 {
     use Queueable, SerializesModels;
 
