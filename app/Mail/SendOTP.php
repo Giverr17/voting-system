@@ -25,13 +25,13 @@ class SendOTP extends Mailable implements ShouldQueue // ✅ Add this!
     public function envelope(): Envelope
     {
         Log::info('SendOTP envelope', [
-            'fromName'    => $this->fromName,
+            'fromName'=> $this->fromName,
         ]);
 
         return new Envelope(
             from: new \Illuminate\Mail\Mailables\Address(
                 config('mail.from.address'),
-                $this->fromName  // ✅ Use stored value
+                $this->fromName 
             ),
             subject: 'OTP Message',
         );
