@@ -32,7 +32,7 @@
                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                         </div>
-                        <input type="text" wire:model.live.debounce.1000ms="identifier" {{-- ✅ Fixed: Correct syntax with longer debounce --}}
+                        <input type="text" wire:model.live.debounce.200ms="identifier" {{-- ✅ Fixed: Correct syntax with longer debounce --}}
                             placeholder="john@example.com or MAT12345"
                             class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             autocomplete="off">
