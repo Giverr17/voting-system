@@ -9,29 +9,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
+
 
 class SendOTP extends Mailable implements ShouldQueue 
 {
     use Queueable, SerializesModels;
 
-    public string $fromName; 
-
     public function __construct(public User $user)
     {
-        $this->fromName = config('app.name');
+        //
     }
 
     public function envelope(): Envelope
     {
-        Log::info('SendOTP envelope', [
-            'fromName'=> $this->fromName,
-        ]);
-
         return new Envelope(
             from: new \Illuminate\Mail\Mailables\Address(
                 config('mail.from.address'),
-                $this->fromName 
+                config('app.name')
             ),
             subject: 'OTP Message',
         );

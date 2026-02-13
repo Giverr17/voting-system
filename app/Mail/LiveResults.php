@@ -16,14 +16,10 @@ class LiveResults extends Mailable implements ShouldQueue
 
     /**
      * Create a new message instance.
-     * 
      */
-    public string $fromName;
-
-
     public function __construct(public User $user)
     {
-        $this->fromName = config('app.name');
+        //
     }
 
     /**
@@ -34,7 +30,7 @@ class LiveResults extends Mailable implements ShouldQueue
         return new Envelope(
             from: new \Illuminate\Mail\Mailables\Address(
                 config('mail.from.address'),
-                $this->fromName  // ✅ Use stored value
+                config('app.name')
             ),
             subject: 'Live Results',
         );
