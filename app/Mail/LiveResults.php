@@ -28,6 +28,10 @@ class LiveResults extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: new \Illuminate\Mail\Mailables\Address(
+                'contact@aces-portal.com',
+                'Aces Portal'
+            ),
             subject: 'Live Results',
         );
     }
