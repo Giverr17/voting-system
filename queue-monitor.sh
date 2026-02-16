@@ -42,10 +42,9 @@ start_queue() {
     fi
 
     $NOHUP_BIN $PHP_BIN artisan queue:work \
+        --stop-when-empty \
         --tries=3 \
         --timeout=90 \
-        --sleep=3 \
-        --max-jobs=1000 \
         >> "$LOG_FILE" 2>&1 &
 
     QUEUE_PID=$!
