@@ -10,6 +10,7 @@ use App\Models\Candidate;
 use App\Models\PreRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
@@ -22,27 +23,45 @@ class AdminController extends Controller
         ]);
 
         $file = fopen($request->file('csv_file'), 'r');
-        fgetcsv($file);
+
+        // Skip BOM if present (common in Excel-exported CSVs)
+        $bom = fread($file, 3);
+        if ($bom !== "\xEF\xBB\xBF") {
+            rewind($file);
+        }
+
+        fgetcsv($file); // skip header row
+
+        $imported = 0;
+        $skipped = 0;
 
         try {
             while (($row = fgetcsv($file)) !== false) {
-                [$mat_no, $full_name] = $row;
-
-                if (PreRegistration::where('mat_no', $mat_no)->exists()) {
-                        continue;
+                // Skip empty or malformed rows
+                if (count($row) < 2 || empty(trim($row[0]))) {
+                    $skipped++;
+                    continue;
                 }
-                PreRegistration::create([
-                    'mat_no' => $mat_no,
-                    'full_name' => $full_name,
-                    'status' => PreRegistrationStatus::PENDING,
-                ]);
+
+                $mat_no = trim($row[0]);
+                $full_name = trim($row[1]);
+
+                PreRegistration::updateOrCreate(
+                    ['mat_no' => $mat_no],
+                    [
+                        'full_name' => $full_name,
+                        'status' => PreRegistrationStatus::PENDING,
+                    ]
+                );
+                $imported++;
             }
         } catch (\Throwable $th) {
             fclose($file);
+            Log::info($th->getMessage());
             return back()->with('error-pre-users', 'CSV upload failed: ' . $th->getMessage());
         }
         fclose($file);
-        return back()->with('add-pre-users', 'CSV uploaded successfully');
+        return back()->with('add-pre-users', "CSV uploaded successfully. {$imported} imported, {$skipped} skipped.");
     }
 
 
