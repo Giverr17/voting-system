@@ -151,7 +151,7 @@
                                         $levels = [100, 200, 300, 400, 500];
                                     @endphp
                                     @foreach ($levels as $level)
-                                        <option value="{{ $level }}" {{ $level == $level ? 'selected' : '' }}>
+                                        <option value="{{ $level }}" {{ $level == $user->level ? 'selected' : '' }}>
                                             {{ $level }}
                                         </option>
                                     @endforeach
