@@ -31,7 +31,12 @@ class LoginCheck extends Component
         $this->validate([
             'mat_no' => 'required|string'
         ]);
-        $preReg = PreRegistration::where('mat_no', $this->mat_no)->first();
+
+        // Normalize: trim whitespace, strip invisible chars (BOM etc), uppercase
+        $cleanMatNo = strtoupper(trim(preg_replace('/[\x{FEFF}\x{200B}\x{00EF}\x{00BB}\x{00BF}]/u', '', $this->mat_no)));
+        $this->mat_no = $cleanMatNo;
+
+        $preReg = PreRegistration::whereRaw('UPPER(TRIM(mat_no)) = ?', [$cleanMatNo])->first();
 
         if (!$preReg) {
             $this->addError('mat_no', 'Invalid matriculation number.');
@@ -40,7 +45,12 @@ class LoginCheck extends Component
             return;
         }
 
-        if (User::where('mat_no', $this->mat_no)->exists()) {
+        // Auto-fix corrupted mat_no in the database
+        if ($preReg->mat_no !== $cleanMatNo) {
+            $preReg->update(['mat_no' => $cleanMatNo]);
+        }
+
+        if (User::whereRaw('UPPER(TRIM(mat_no)) = ?', [$cleanMatNo])->exists()) {
             $this->addError('mat_no', 'This matriculation number is already registered.');
             $this->verificationMessage = 'This matriculation number is already registered.';
             $this->isVerified = false;
