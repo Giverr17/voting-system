@@ -48,14 +48,14 @@
                     </form>
                 @else
                     <!-- Guest users -->
-                    <a href="{{ route('login') }}" class="text-gray-700 font-medium hover:text-blue-600 transition">
+                    {{-- <a href="{{ route('login') }}" class="text-gray-700 font-medium hover:text-blue-600 transition">
                         Login
-                    </a>
+                    </a> --}}
 
-                    <a href="{{ route('register-index') }}"
+                    {{-- <a href="{{ route('register-index') }}"
                         class="text-gray-700 font-medium hover:text-blue-600 transition">
                         Register
-                    </a>
+                    </a> --}}
                 @endauth
             </div>
 
@@ -85,7 +85,7 @@
 
             <!-- Action Buttons -->
             <div class="space-y-3">
-                @auth
+                {{-- @auth
                     @if (auth()->user()->role == \App\Enums\Role::ADMIN)
                         <a href="{{ route('admin-index') }}"
                             class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
@@ -98,21 +98,30 @@
                         </a>
                     @endif
 
-                    <a href="{{ route('check-candidate') }}"
+                    <a href="{{ route('vote-audit') }}"
+                        class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
+                       Check Result
+                    </a> --}}
+                    {{-- <a href="{{ route('check-candidate') }}"
                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
                         View Candidates
-                    </a>
-                @else
+                    </a> --}}
+                {{-- @else
                     <a href="{{ route('login') }}"
                         class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
                         Login to Vote
-                    </a>
+                    </a> --}}
 
-                    <a href="{{ route('check-candidate') }}"
+                    {{-- <a href="{{ route('check-candidate') }}"
                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
                         View Candidates
+                    </a> --}}
+
+                    <a href="{{ route('vote-audit') }}"
+                        class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
+                       Check Result
                     </a>
-                @endauth
+                {{-- @endauth --}}
             </div>
 
         </div>

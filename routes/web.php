@@ -5,6 +5,7 @@ use App\Enums\Role;
 use App\Http\Controllers\AddCandidate;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\VoteAudit;
 use App\Livewire\LiveResults as LivewireLiveResults;
 use App\Mail\LiveResults;
 use App\Models\Candidate;
@@ -52,6 +53,8 @@ Route::get('/check-candidate', function () {
     }
     return view('check-candidate', compact('candidatesByPosition'));
 })->name('check-candidate');
+
+Route::get('/vote-audit', [VoteAudit::class, 'voteAudit'])->name('vote-audit');
 
 Route::post('/login', [LoginController::class, 'loginAuth'])->name('login-auth');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout-auth');
