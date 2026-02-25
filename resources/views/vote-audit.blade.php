@@ -48,7 +48,6 @@
                         <th class="px-4 py-3">Mat No</th>
                         <th class="px-4 py-3">Total Votes</th>
                         <th class="px-4 py-3">Positions Voted</th>
-                        <th class="px-4 py-3">Candidates Voted</th>
                     </tr>
                 </thead>
 
