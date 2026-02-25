@@ -17,7 +17,7 @@ public function voteAudit()
             'u.mat_no',
             DB::raw('COUNT(*) as total_votes_cast'),
             DB::raw("GROUP_CONCAT(DISTINCT v.position ORDER BY v.position SEPARATOR ', ') as positions_voted"),
-            DB::raw("GROUP_CONCAT(CONCAT(v.position, ' → ', c.full_name) ORDER BY v.position SEPARATOR ' | ') as candidates_voted")
+            // DB::raw("GROUP_CONCAT(CONCAT(v.position, ' → ', c.full_name) ORDER BY v.position SEPARATOR ' | ') as candidates_voted")
         )
         ->groupBy('u.mat_no')
         ->orderBy('u.mat_no')

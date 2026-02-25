@@ -69,11 +69,11 @@
                             </td>
 
                             <!-- Scrollable Cell for Candidates -->
-                            <td class="px-4 py-3">
+                            {{-- <td class="px-4 py-3">
                                 <div class="max-w-md overflow-x-auto whitespace-nowrap">
                                     {{ $vote->candidates_voted }}
                                 </div>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
 
