@@ -18,7 +18,7 @@
             <div class="flex items-center gap-3">
                 <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10" />
                 <h1 class="text-lg font-semibold text-gray-800">
-                    Class Election Voting System
+                     Election Voting System
                 </h1>
             </div>
 
