@@ -15,7 +15,7 @@
 
                     <tr>
                         <td style="text-align:center;">
-                            <img src="{{ asset('images/Aces.png') }}" width="80" alt="Election Logo"
+                            <img src="{{ asset('images/APWEN.png') }}" width="80" alt="Election Logo"
                                  style="margin-bottom:20px;">
                         </td>
                     </tr>

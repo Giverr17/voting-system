@@ -30,7 +30,7 @@ class LiveResults extends Mailable implements ShouldQueue
         return new Envelope(
             from: new \Illuminate\Mail\Mailables\Address(
                 'contact@aces-portal.com',
-                'Aces Portal'
+                'APWEN'
             ),
             subject: 'Live Results',
         );
