@@ -15,7 +15,7 @@
                 <span>{{ count($votedPositions) }} / {{ count($positions) }} positions</span>
             </div>
             <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                <div class="bg-apwen h-2 rounded-full transition-all duration-300"
                     style="width: {{ count($positions) > 0 ? (count($votedPositions) / count($positions)) * 100 : 0 }}%">
                 </div>
             </div>
@@ -85,12 +85,12 @@
                                 <div wire:click="selectCandidate('{{ $position }}', {{ $candidate->id }})"
                                     class="relative border-2 rounded-lg p-4 cursor-pointer transition-all duration-200
                                         {{ isset($selectedCandidates[$position->value]) && $selectedCandidates[$position->value] == $candidate->id
-                                            ? 'border-blue-500 bg-blue-50 shadow-lg'
-                                            : 'border-gray-200 hover:border-blue-300 hover:shadow-md' }}">
+                                            ? 'border-apwen bg-apwen-50 shadow-lg'
+                                            : 'border-gray-200 hover:border-apwen-light hover:shadow-md' }}">
 
                                     {{-- Selection Indicator --}}
                                     @if (isset($selectedCandidates[$position->value]) && $selectedCandidates[$position->value] == $candidate->id)
-                                        <div class="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-1.5">
+                                        <div class="absolute top-2 right-2 bg-apwen text-white rounded-full p-1.5">
                                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd"
                                                     d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -107,7 +107,7 @@
                                                 class="w-24 h-24 rounded-full object-cover mx-auto border-4 border-gray-200">
                                         @else
                                             <div
-                                                class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 mx-auto flex items-center justify-center border-4 border-gray-200">
+                                                class="w-24 h-24 rounded-full bg-gradient-to-br from-apwen-50 to-apwen-100 mx-auto flex items-center justify-center border-4 border-gray-200">
                                                 <svg class="w-12 h-12 text-gray-400" fill="currentColor"
                                                     viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
@@ -125,7 +125,7 @@
                                             <div
                                                 class="w-5 h-5 rounded-full border-2 flex items-center justify-center
                                                 {{ isset($selectedCandidates[$position->value]) && $selectedCandidates[$position->value] == $candidate->id
-                                                    ? 'border-blue-500 bg-blue-500'
+                                                    ? 'border-apwen bg-apwen'
                                                     : 'border-gray-300' }}">
                                                 @if (isset($selectedCandidates[$position->value]) && $selectedCandidates[$position->value] == $candidate->id)
                                                     <div class="w-2 h-2 bg-white rounded-full"></div>
@@ -158,7 +158,7 @@
 
                         {{-- Submit Button --}}
                         <button wire:click="submitVote('{{ $position->value }}')"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors
+                            class="w-full bg-apwen hover:bg-apwen-dark text-white font-semibold py-3 rounded-lg transition-colors
                                 {{ !isset($selectedCandidates[$position->value]) ? 'opacity-50 cursor-not-allowed' : '' }}"
                             {{ !isset($selectedCandidates[$position->value]) ? 'disabled' : '' }}>
                             Submit Vote for {{ $position->label() }}

@@ -132,7 +132,29 @@
                                 </label>
                                 <select name="department"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                                    <option value="{{ $user->department }}" selected>Computer Engineering</option>
+                                    <option value="{{ $user->department }}">{{ $user->department }}</option>
+
+                            @php
+                                $departments = [
+                                    'Industrial Engineering',
+                                    'Civil/Structural Engineering',
+                                    'Production Engineering',
+                                    'Chemical Engineering',
+                                    'Electrical Engineering',
+                                    'Computer Engineering',
+                                    'Mechanical Engineering',
+                                    'Marine Engineering',
+                                    'Mechatronics Engineering',
+                                    'Petroleum Engineering',
+                                    'Agricultural Engineering',
+                                    'Metallurgical Engineering',
+                                ];
+                            @endphp
+                            @foreach ($departments as $department)
+                                <option value="{{ $department }}">
+                                    {{ $department }}
+                                </option>
+                            @endforeach
                                 </select>
                                 @error('department')
                                     <small class="text-danger text-sm text-red-500">{{ $message }}</small>

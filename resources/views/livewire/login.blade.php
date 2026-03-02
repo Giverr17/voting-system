@@ -1,4 +1,4 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-apwen-50 to-apwen-100 p-4">
     <div class="w-full max-w-md">
         <div class="bg-white rounded-2xl shadow-xl p-8">
 
@@ -11,8 +11,8 @@
 
             {{-- Header --}}
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
-                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-apwen-100 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-apwen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
@@ -39,20 +39,13 @@
 
                         <input
                             type="text"
-                            wire:model.live.debounce.1500ms="identifier"
+                            wire:model="identifier"
                             placeholder="john@example.com or MAT12345"
-                            class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition"
                             autocomplete="off"
                         >
 
-                        {{-- ✅ Fixed: Spinner properly centered --}}
-                        <div wire:loading wire:target="updatedIdentifier"
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
+
                     </div>
 
                     {{-- Custom Error --}}
@@ -83,7 +76,7 @@
                                 type="password"
                                 wire:model="password"
                                 placeholder="Enter your password"
-                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition"
                                 autocomplete="current-password"
                             >
                         </div>
@@ -142,17 +135,17 @@
                 <button
                     wire:click="login"
                     wire:loading.attr="disabled"
-                    class="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition flex items-center justify-center min-h-[48px]"
+                    class="w-full bg-apwen hover:bg-apwen-dark disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition flex items-center justify-center min-h-[48px]"
                 >
                     <span wire:loading.remove wire:target="login">
-                        Login
+                        {{ $showCodeField ? 'Login' : 'Continue' }}
                     </span>
                     <span wire:loading wire:target="login" class="flex items-center justify-center gap-2">
                         <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Logging in...
+                        {{ $showCodeField ? 'Logging in...' : 'Sending OTP...' }}
                     </span>
                 </button>
 
@@ -167,7 +160,7 @@
                     <p class="text-sm text-gray-600">
                         Don't have an account?
                         <a href="{{ route('register-index') }}"
-                            class="text-blue-600 hover:text-blue-700 font-medium hover:underline transition">
+                            class="text-apwen hover:text-apwen-dark font-medium hover:underline transition">
                             Sign up here
                         </a>
                     </p>

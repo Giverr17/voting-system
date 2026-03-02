@@ -80,8 +80,7 @@
                                 </path>
                             </svg>
                             Upload New Photo
-                            <input type="file" name="image" class="hidden"
-                                accept="image/*">
+                            <input type="file" name="image" class="hidden" accept="image/*">
                         </label>
                         <p class="text-xs text-gray-500 mt-2">JPG, PNG or GIF (Max 2MB)</p>
                         @error('image')
@@ -138,7 +137,28 @@
                         </label>
                         <select name="department"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                            <option selected>Computer Engineering</option>
+                            <option value="">Select a department</option>
+                            @php
+                                $departments = [
+                                    'Industrial Engineering',
+                                    'Civil/Structural Engineering',
+                                    'Production Engineering',
+                                    'Chemical Engineering',
+                                    'Electrical Engineering',
+                                    'Computer Engineering',
+                                    'Mechanical Engineering',
+                                    'Marine Engineering',
+                                    'Mechatronics Engineering',
+                                    'Petroleum Engineering',
+                                    'Agricultural Engineering',
+                                    'Metallurgical Engineering',
+                                ];
+                            @endphp
+                            @foreach ($departments as $department)
+                                <option value="{{ $department }}" {{ old('level') == $department ? 'selected' : '' }}>
+                                    {{ $department }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     @error('department')
@@ -149,12 +169,13 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Level <span class="text-red-500">*</span>
                         </label>
-                       
-                          <select name="level"
+
+                        <select name="level"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             <option value="">Select a Level</option>
                             @php
                                 $levels = [
+                                
                                     200,
                                     300,
                                     400,
@@ -162,8 +183,7 @@
                                 ];
                             @endphp
                             @foreach ($levels as $level)
-                                <option value="{{ $level }}"
-                                    {{ old('level') == $level ? 'selected' : '' }}>
+                                <option value="{{ $level }}" {{ old('level') == $level ? 'selected' : '' }}>
                                     {{ $level }}
                                 </option>
                             @endforeach
@@ -197,10 +217,9 @@
                         <select name="position_applied"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
                             <option value="">Select a position</option>
-                          
+
                             @foreach ($positions as $position)
-                                <option value="{{ $position->value }}"
-                                    {{ old('position_applied') == $position->value ? 'selected' : '' }}>
+                                <option value="{{ $position->value }}" {{ old('position_applied') == $position->value ? 'selected' : '' }}>
                                     {{ $position->label() }}
                                 </option>
                             @endforeach

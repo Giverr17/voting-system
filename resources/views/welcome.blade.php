@@ -16,7 +16,8 @@
 
             <!-- Left: Logo + Title -->
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10" />
+                {{-- <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10" /> --}}
+                <img src="{{ asset('images/APWEN.png') }}" alt="APWEN Logo" class="w-10 h-10" />
                 <h1 class="text-lg font-semibold text-gray-800">
                      Election Voting System
                 </h1>
@@ -30,19 +31,19 @@
 
                     @if (auth()->user()->role == \App\Enums\Role::ADMIN)
                         <a href="{{ route('admin-index') }}"
-                            class="text-gray-700 font-medium hover:text-blue-600 transition">
+                            class="text-gray-700 font-medium hover:text-apwen transition">
                             Admin Dashboard
                         </a>
                     @else
                         <a href="{{ route('vote-index') }}"
-                            class="text-gray-700 font-medium hover:text-blue-600 transition">
+                            class="text-gray-700 font-medium hover:text-apwen transition">
                             Vote
                         </a>
                     @endif
 
                     <form method="POST" action="{{ route('logout-auth') }}" class="inline">
                         @csrf
-                        <button type="submit" class="text-gray-700 font-medium hover:text-blue-600 transition">
+                        <button type="submit" class="text-gray-700 font-medium hover:text-apwen transition">
                             Logout
                         </button>
                     </form>
@@ -72,7 +73,8 @@
         <div class="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
 
             <!-- Center Logo -->
-            <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-32 h-32 mx-auto mb-6" />
+            {{-- <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-32 h-32 mx-auto mb-6" /> --}}
+            <img src="{{ asset('images/APWEN.png') }}" alt="APWEN Logo" class="w-32 h-32 mx-auto mb-6" />
 
             <h2 class="text-2xl font-bold text-gray-800 mb-3">
                 Welcome to the Voting Portal
@@ -85,7 +87,7 @@
 
             <!-- Action Buttons -->
             <div class="space-y-3">
-                {{-- @auth
+                 @auth
                     @if (auth()->user()->role == \App\Enums\Role::ADMIN)
                         <a href="{{ route('admin-index') }}"
                             class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
@@ -101,27 +103,27 @@
                     <a href="{{ route('vote-audit') }}"
                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
                        Check Result
-                    </a> --}}
-                    {{-- <a href="{{ route('check-candidate') }}"
+                    </a> 
+                    <a href="{{ route('check-candidate') }}"
                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
                         View Candidates
-                    </a> --}}
-                {{-- @else
+                    </a> 
+             @else
                     <a href="{{ route('login') }}"
-                        class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
+                     class="w-full bg-apwen hover:bg-apwen-dark disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition flex items-center justify-center min-h-[48px]">
                         Login to Vote
-                    </a> --}}
+                    </a> 
 
-                    {{-- <a href="{{ route('check-candidate') }}"
+                    <a href="{{ route('check-candidate') }}"
                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
                         View Candidates
-                    </a> --}}
+                    </a> 
 
-                    <a href="{{ route('vote-audit') }}"
+                    <!-- <a href="{{ route('vote-audit') }}"
                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
                        Check Result
-                    </a>
-                {{-- @endauth --}}
+                    </a> -->
+                 @endauth
             </div>
 
         </div>

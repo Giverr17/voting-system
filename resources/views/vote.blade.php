@@ -14,16 +14,17 @@
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10" />
-                <h1 class="text-lg font-semibold text-gray-800">Class Election Voting System</h1>
+                {{-- <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10" /> --}}
+                <img src="{{ asset('images/APWEN.png') }}" alt="APWEN Logo" class="w-10 h-10" />
+                <h1 class="text-lg font-semibold text-gray-800">Election Voting System</h1>
             </div>
 
             <div class="flex items-center gap-6">
                 <span class="text-gray-700">{{ auth()->user()->name }}</span>
-                <a href="{{ route('welcome') }}" class="text-gray-700 hover:text-blue-600">Home</a>
+                <a href="{{ route('welcome') }}" class="text-gray-700 hover:text-apwen">Home</a>
                 <form method="POST" action="{{ route('logout-auth') }}" class="inline">
                     @csrf
-                    <button type="submit" class="text-gray-700 hover:text-blue-600">Logout</button>
+                    <button type="submit" class="text-gray-700 hover:text-apwen">Logout</button>
                 </form>
             </div>
         </div>

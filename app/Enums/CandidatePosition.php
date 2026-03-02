@@ -6,7 +6,9 @@ use function PHPSTORM_META\map;
 
 enum CandidatePosition: string
 {
-    case PRESIDENT =  'president';
+    case PRESIDENT =  'president'; 
+    case STUDENT_COORDINATOR='student_coordinator';
+    case ASSISTANT_STUDENT_COORDINATOR='assistant_student_coordinator';
     case VICE_PRESIDENT ='vice_president';
     case SECRETARY_GENERAL = 'secretary_general';
     case FINANCIAL_SECRETARY = 'finicial_secretary';
@@ -21,6 +23,8 @@ enum CandidatePosition: string
     {
         return match ($this) {
             self::PRESIDENT => 'President',
+            self::STUDENT_COORDINATOR=>'Student Coordinator',
+            self::ASSISTANT_STUDENT_COORDINATOR=>'Assistant Student Coordinator',
             self::VICE_PRESIDENT => 'Vice president',
             self::SECRETARY_GENERAL => 'Secretary General ',
             self::FINANCIAL_SECRETARY => 'Financial Secretary ',

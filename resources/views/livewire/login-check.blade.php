@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-gradient-to-br from-blue-100 to-black-100 py-12 px-4">
+<div class="min-h-screen bg-gradient-to-br from-apwen-100 to-black-100 py-12 px-4">
     <div class="max-w-2xl mx-auto">
         <div class="bg-white rounded-2xl shadow-xl p-8">
             <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Student Registration</h1>
@@ -25,7 +25,7 @@
                         </label>
                         <input type="text" id="mat_no" wire:model.live="mat_no" wire:keydown.enter="checkMatNo"
                             placeholder="Enter your matriculation number"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('mat_no') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition @error('mat_no') border-red-500 @else border-gray-300 @enderror"
                             required>
                         @error('mat_no')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -40,7 +40,7 @@
                     @endif
 
                     <button wire:click="checkMatNo"
-                    class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">                        Verify Matriculation Number
+                    class="block w-full bg-apwen hover:bg-apwen-dark text-white py-3 rounded-lg font-medium transition">                        Verify Matriculation Number
                     </button>
                 </div>
 
@@ -65,7 +65,7 @@
                         </label>
                         <input type="text" id="username" wire:model.live="username"
                             placeholder="Enter your username"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('username') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition @error('username') border-red-500 @else border-gray-300 @enderror"
                             required>
                         @error('username')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -78,7 +78,7 @@
                             Email Address <span class="text-red-500">*</span>
                         </label>
                         <input type="email" id="email" wire:model.live="email" placeholder="example@email.com"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('email') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition @error('email') border-red-500 @else border-gray-300 @enderror"
                             required>
                         @error('email')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -91,11 +91,13 @@
                             Department <span class="text-red-500">*</span>
                         </label>
                         <select id="department" wire:model.live="department"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('department') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition @error('department') border-red-500 @else border-gray-300 @enderror"
                             required>
-                            <option value="">Select your department</option>
 
-                            <option value="{{ $departments }}">{{ $departments }}</option>
+                            <option value="">Select your department</option>
+                            @foreach ($departments as $department)
+                                <option value="{{ $department }}">{{ $department }}</option>
+                            @endforeach
 
                         </select>
                         @error('department')
@@ -109,7 +111,7 @@
                             Level <span class="text-red-500">*</span>
                         </label>
                         <select id="level" wire:model.live="level"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('level') border-red-500 @else border-gray-300 @enderror"
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition @error('level') border-red-500 @else border-gray-300 @enderror"
                             required>
                             <option value="">Select your level</option>
                             @foreach ($levels as $lvl)
@@ -123,7 +125,7 @@
 
                     <!-- Submit Button -->
                     <button type="submit"
-                    class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">                        Complete Registration
+                    class="block w-full bg-apwen hover:bg-apwen-dark text-white py-3 rounded-lg font-medium transition">                        Complete Registration
                     </button>
                 </form>
             @endif

@@ -17,9 +17,23 @@ class LoginCheck extends Component
     public $username = '';
     public $email = '';
     public $department = '';
-    public $departments = 'Computer Engineering';
+    public $departments = [
+        'Industrial Engineering',
+        'Civil/Structural Engineering',
+        'Production Engineering',
+        'Chemical Engineering',
+        'Electrical Engineering',
+        'Computer Engineering',
+        'Mechanical Engineering',
+        'Marine Engineering',
+        'Mechatronics Engineering',
+        'Petroleum Engineering',
+        'Agricultural Engineering',
+        'Metallurgical Engineering',
+    ];
     public $level = '';
     public $levels = [
+        100,
         200,
         300,
         400,

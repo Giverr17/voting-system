@@ -39,7 +39,8 @@
             @endif
         </div>
         <!-- Form Body -->
-        <form action="{{ route('candidate-edit', $candidate->id) }}" class="p-8" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('candidate-edit', $candidate->id) }}" class="p-8" method="POST"
+            enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <!-- Profile Photo Section -->
@@ -138,7 +139,29 @@
                         </label>
                         <select name="department"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
-                            <option selected>Computer Engineering</option>
+                            <option value="{{ $candidate->department }}">{{ $candidate->department }}</option>
+
+                            @php
+                                $departments = [
+                                    'Industrial Engineering',
+                                    'Civil/Structural Engineering',
+                                    'Production Engineering',
+                                    'Chemical Engineering',
+                                    'Electrical Engineering',
+                                    'Computer Engineering',
+                                    'Mechanical Engineering',
+                                    'Marine Engineering',
+                                    'Mechatronics Engineering',
+                                    'Petroleum Engineering',
+                                    'Agricultural Engineering',
+                                    'Metallurgical Engineering',
+                                ];
+                            @endphp
+                            @foreach ($departments as $department)
+                                <option value="{{ $department }}">
+                                    {{ $department }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     @error('department')
@@ -163,8 +186,7 @@
                                 ];
                             @endphp
                             @foreach ($levels as $level)
-                                <option value="{{ $level }}"
-                                    {{ old('level') == $level ? 'selected' : '' }}>
+                                <option value="{{ $level }}" {{ old('level') == $level ? 'selected' : '' }}>
                                     {{ $level }}
                                 </option>
                             @endforeach
@@ -195,7 +217,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">
                             Position Running For <span class="text-red-500">*</span>
                         </label>
-                          <select name="position_applied"
+                        <select name="position_applied"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
                             <option value="{{ $candidate->position_applied }}">{{ $candidate->position_applied }}</option>
                             @php
@@ -210,44 +232,43 @@
                                 ];
                             @endphp
                             @foreach ($positions as $position)
-                                <option value="{{ $position }}"
-                                    {{ old('position_applied') == $position ? 'selected' : '' }}>
+                                <option value="{{ $position }}" {{ old('position_applied') == $position ? 'selected' : '' }}>
                                     {{ $position }}
                                 </option>
                             @endforeach
                         </select>
-                    @error('position_applied')
-                        <small class="text-danger text-sm text-red-500">{{ $message }}</small>
-                    @enderror
-
-                    <!-- Campaign Slogan -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Campaign Slogan
-                        </label>
-                        <input type="text" name="slogan" value="{{$candidate->slogan}}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                            placeholder="Enter campaign slogan">
-                        @error('slogan')
+                        @error('position_applied')
                             <small class="text-danger text-sm text-red-500">{{ $message }}</small>
                         @enderror
-                    </div>
-                    <div class="flex items-center justify-between pt-6 border-t border-gray-200">
-                        <a href="{{ route('admin-index') }}"> <button type="button"
-                                class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium">
-                                Cancel
-                            </button>
-                        </a>
-                        <div class="flex gap-3">
-                            <button type="submit"
-                                class="px-8 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition font-medium shadow-lg shadow-blue-500/30">
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
 
+                        <!-- Campaign Slogan -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Campaign Slogan
+                            </label>
+                            <input type="text" name="slogan" value="{{$candidate->slogan}}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                                placeholder="Enter campaign slogan">
+                            @error('slogan')
+                                <small class="text-danger text-sm text-red-500">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                            <a href="{{ route('admin-index') }}"> <button type="button"
+                                    class="px-6 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium">
+                                    Cancel
+                                </button>
+                            </a>
+                            <div class="flex gap-3">
+                                <button type="submit"
+                                    class="px-8 py-3 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition font-medium shadow-lg shadow-blue-500/30">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
         </form>
 
     </div>
