@@ -30,7 +30,7 @@ class AddCandidate extends FormRequest
             'department' => ['required', 'string'],
             'mat_no' => [
                 'required',
-                'size:10',
+                // 'size:10',
                 Rule::unique('candidates', 'mat_no')->ignore($this->route('id')),
             ],
             'level' => ['required'],
