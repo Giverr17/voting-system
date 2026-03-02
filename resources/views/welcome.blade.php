@@ -49,14 +49,14 @@
                     </form>
                 @else
                     <!-- Guest users -->
-                    {{-- <a href="{{ route('login') }}" class="text-gray-700 font-medium hover:text-blue-600 transition">
+                     <a href="{{ route('login') }}" class="text-gray-700 font-medium hover:text-blue-600 transition">
                         Login
-                    </a> --}}
+                    </a>
 
-                    {{-- <a href="{{ route('register-index') }}"
+                     <a href="{{ route('register-index') }}"
                         class="text-gray-700 font-medium hover:text-blue-600 transition">
                         Register
-                    </a> --}}
+                    </a>
                 @endauth
             </div>
 
