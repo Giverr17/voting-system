@@ -1,4 +1,4 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-apwen-50 to-apwen-100 p-4">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
     <div class="w-full max-w-md">
         <div class="bg-white rounded-2xl shadow-xl p-8">
 
@@ -11,8 +11,8 @@
 
             {{-- Header --}}
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-apwen-100 rounded-full mb-4">
-                    <svg class="w-8 h-8 text-apwen" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
@@ -41,7 +41,7 @@
                             type="text"
                             wire:model="identifier"
                             placeholder="john@example.com or MAT12345"
-                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition"
+                            class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             autocomplete="off"
                         >
 
@@ -76,7 +76,7 @@
                                 type="password"
                                 wire:model="password"
                                 placeholder="Enter your password"
-                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-apwen focus:border-transparent transition"
+                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                                 autocomplete="current-password"
                             >
                         </div>
@@ -135,7 +135,7 @@
                 <button
                     wire:click="login"
                     wire:loading.attr="disabled"
-                    class="w-full bg-apwen hover:bg-apwen-dark disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition flex items-center justify-center min-h-[48px]"
+                    class="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition flex items-center justify-center min-h-[48px]"
                 >
                     <span wire:loading.remove wire:target="login">
                         {{ $showCodeField ? 'Login' : 'Continue' }}
@@ -160,7 +160,7 @@
                     <p class="text-sm text-gray-600">
                         Don't have an account?
                         <a href="{{ route('register-index') }}"
-                            class="text-apwen hover:text-apwen-dark font-medium hover:underline transition">
+                            class="text-blue-600 hover:text-blue-700 font-medium hover:underline transition">
                             Sign up here
                         </a>
                     </p>

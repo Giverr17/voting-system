@@ -25,7 +25,7 @@ class SendOTP extends Mailable implements ShouldQueue
         return new Envelope(
             from: new \Illuminate\Mail\Mailables\Address(
                 'contact@aces-portal.com',
-                'APWEN'
+                'Aces Portal'
             ),
             subject: 'OTP Message',
         );
