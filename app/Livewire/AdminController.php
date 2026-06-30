@@ -78,14 +78,19 @@ protected $scrollToTop = false;
 {
     $user = User::with('preRegistration')
         ->whereHas('preRegistration', function ($q) {
-            $q->where('status', PreRegistrationStatus::REGISTERED);
+            $q->whereNotIn('status', [
+                PreRegistrationStatus::APPROVED,
+                PreRegistrationStatus::REJECTED,
+            ]);
         })
         ->where('id', $id)
         ->firstOrFail();
-        
+
     $user->preRegistration->update([
         'status' => PreRegistrationStatus::APPROVED
     ]);
+
+    $this->loadCounts();
 }
 
     protected function getPreRegistrationQuery()

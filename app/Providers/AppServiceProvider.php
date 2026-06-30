@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +35,9 @@ class AppServiceProvider extends ServiceProvider
         // Model::preventLazyLoading();
         if (env('APP_ENV') !== 'local') {
             Schema::defaultStringLength(191);
+        }
+         if (config('app.env') !== "production") {
+            URL::forceScheme('https');
         }
     }
 }
