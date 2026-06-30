@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\CustomRoute;
 use App\Http\Middleware\NoCache;
+use App\Http\Middleware\RegistrationOpen;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\VoteMiddleWare;
 use Illuminate\Foundation\Application;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'election.open' => VoteMiddleWare::class,
+            'registration.open' => RegistrationOpen::class,
             'no-cache' => NoCache::class,
             // 'route'=>CustomRoute::class,
         ]);

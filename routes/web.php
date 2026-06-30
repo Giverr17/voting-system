@@ -36,7 +36,7 @@ Route::get('/test', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/register', function () {
         return view('register');
-    })->name('register-index');
+    })->middleware('registration.open')->name('register-index');
     Route::get('/login', [LoginController::class, 'login'])->name('login');
 });
 Route::get('/check-candidate', function () {

@@ -73,6 +73,92 @@
             </div>
         </div>
 
+        <!-- Election Controls -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Toggles -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-1">Election Controls</h2>
+                <p class="text-sm text-gray-600 mb-5">Open or close voting and registration in real time.</p>
+
+                @if (session('control-message'))
+                    <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-800 text-sm font-medium">
+                        {{ session('control-message') }}
+                    </div>
+                @endif
+
+                {{-- Election toggle --}}
+                <div class="flex items-center justify-between py-4 border-b border-gray-100">
+                    <div>
+                        <p class="font-medium text-gray-900">Election Status</p>
+                        <p class="text-sm {{ $electionOpen ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $electionOpen ? 'Open — voters can cast votes' : 'Closed — voting is halted' }}
+                        </p>
+                    </div>
+                    <button type="button" wire:click="toggleElection" wire:loading.attr="disabled"
+                        role="switch" aria-checked="{{ $electionOpen ? 'true' : 'false' }}"
+                        class="relative inline-flex h-7 w-12 flex-shrink-0 items-center rounded-full transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 {{ $electionOpen ? 'bg-green-600' : 'bg-gray-300' }}">
+                        <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition {{ $electionOpen ? 'translate-x-6' : 'translate-x-1' }}"></span>
+                    </button>
+                </div>
+
+                {{-- Registration toggle --}}
+                <div class="flex items-center justify-between py-4">
+                    <div>
+                        <p class="font-medium text-gray-900">Registration Status</p>
+                        <p class="text-sm {{ $registrationOpen ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $registrationOpen ? 'Open — new voters can register' : 'Closed — registration is disabled' }}
+                        </p>
+                    </div>
+                    <button type="button" wire:click="toggleRegistration" wire:loading.attr="disabled"
+                        role="switch" aria-checked="{{ $registrationOpen ? 'true' : 'false' }}"
+                        class="relative inline-flex h-7 w-12 flex-shrink-0 items-center rounded-full transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 {{ $registrationOpen ? 'bg-green-600' : 'bg-gray-300' }}">
+                        <span class="inline-block h-5 w-5 transform rounded-full bg-white shadow transition {{ $registrationOpen ? 'translate-x-6' : 'translate-x-1' }}"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Change password -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-1">Change Password</h2>
+                <p class="text-sm text-gray-600 mb-5">Update the password for your admin account.</p>
+
+                @if (session('password-message'))
+                    <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm font-medium">
+                        {{ session('password-message') }}
+                    </div>
+                @endif
+
+                <form wire:submit.prevent="updatePassword" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                        <input type="password" wire:model="current_password" autocomplete="current-password"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('current_password')
+                            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                        <input type="password" wire:model="new_password" autocomplete="new-password"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        @error('new_password')
+                            <p class="text-red-600 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                        <input type="password" wire:model="new_password_confirmation" autocomplete="new-password"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    </div>
+                    <button type="submit" wire:loading.attr="disabled"
+                        class="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white py-2.5 rounded-lg font-medium transition">
+                        <span wire:loading.remove wire:target="updatePassword">Update Password</span>
+                        <span wire:loading wire:target="updatePassword">Updating...</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
         @if (session('add-pre-users'))
             <div
                 class="flex items-center gap-3 max-w-lg mx-auto mt-6 p-4 

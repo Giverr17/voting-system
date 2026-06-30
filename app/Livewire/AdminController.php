@@ -5,7 +5,10 @@ namespace App\Livewire;
 use App\Enums\PreRegistrationStatus;
 use App\Models\Candidate;
 use App\Models\PreRegistration;
+use App\Models\Setting;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -28,6 +31,15 @@ protected $scrollToTop = false;
     public $countApproved = 0;
     public $countVote = 0;
     public $candidateVotes=[];
+
+    // Election controls
+    public bool $electionOpen = false;
+    public bool $registrationOpen = false;
+
+    // Change-password form
+    public $current_password = '';
+    public $new_password = '';
+    public $new_password_confirmation = '';
 
     public function updatedSearchReg()
     {
@@ -54,6 +66,43 @@ protected $scrollToTop = false;
     {
         $this->candidates = Candidate::all();
         $this->loadCounts();
+        $this->electionOpen = Setting::isElectionOpen();
+        $this->registrationOpen = Setting::isRegistrationOpen();
+    }
+
+    public function toggleElection()
+    {
+        $this->electionOpen = !$this->electionOpen;
+        Setting::set('election_status', $this->electionOpen ? 'open' : 'closed');
+        session()->flash('control-message', 'Election is now ' . ($this->electionOpen ? 'OPEN' : 'CLOSED') . '.');
+    }
+
+    public function toggleRegistration()
+    {
+        $this->registrationOpen = !$this->registrationOpen;
+        Setting::set('registration_status', $this->registrationOpen ? 'open' : 'closed');
+        session()->flash('control-message', 'Registration is now ' . ($this->registrationOpen ? 'OPEN' : 'CLOSED') . '.');
+    }
+
+    public function updatePassword()
+    {
+        $this->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        if (!Hash::check($this->current_password, $user->password)) {
+            $this->addError('current_password', 'Your current password is incorrect.');
+            return;
+        }
+
+        // 'password' has a 'hashed' cast on the User model, so this is hashed on save.
+        $user->update(['password' => $this->new_password]);
+
+        $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
+        session()->flash('password-message', 'Your password has been updated.');
     }
 
     protected function userSearchQuery()

@@ -138,14 +138,14 @@
                     class="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition flex items-center justify-center min-h-[48px]"
                 >
                     <span wire:loading.remove wire:target="login">
-                        {{ $showCodeField ? 'Login' : 'Continue' }}
+                        {{ ($showCodeField || $isAdmin) ? 'Login' : 'Continue' }}
                     </span>
                     <span wire:loading wire:target="login" class="flex items-center justify-center gap-2">
                         <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        {{ $showCodeField ? 'Logging in...' : 'Sending OTP...' }}
+                        {{ ($showCodeField || $isAdmin) ? 'Logging in...' : 'Sending OTP...' }}
                     </span>
                 </button>
 
@@ -156,15 +156,17 @@
                 <p class="text-xs text-gray-500">
                     Having trouble? Contact your administrator
                 </p>
-                <div class="border-t border-gray-100 pt-3">
-                    <p class="text-sm text-gray-600">
-                        Don't have an account?
-                        <a href="{{ route('register-index') }}"
-                            class="text-blue-600 hover:text-blue-700 font-medium hover:underline transition">
-                            Sign up here
-                        </a>
-                    </p>
-                </div>
+                @if (\App\Models\Setting::isRegistrationOpen())
+                    <div class="border-t border-gray-100 pt-3">
+                        <p class="text-sm text-gray-600">
+                            Don't have an account?
+                            <a href="{{ route('register-index') }}"
+                                class="text-blue-600 hover:text-blue-700 font-medium hover:underline transition">
+                                Sign up here
+                            </a>
+                        </p>
+                    </div>
+                @endif
             </div>
 
         </div>

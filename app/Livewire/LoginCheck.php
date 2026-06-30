@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\PreRegistrationStatus;
 use App\Models\PreRegistration;
+use App\Models\Setting;
 use App\Models\User;
 use Livewire\Component;
 use PDO;
@@ -42,6 +43,11 @@ class LoginCheck extends Component
 
     public function checkMatNo()
     {
+        if (!Setting::isRegistrationOpen()) {
+            $this->addError('mat_no', 'Registration is currently closed.');
+            return;
+        }
+
         $this->validate([
             'mat_no' => 'required|string'
         ]);
@@ -91,6 +97,11 @@ class LoginCheck extends Component
 
     public function register()
     {
+        if (!Setting::isRegistrationOpen()) {
+            session()->flash('error', 'Registration is currently closed.');
+            return;
+        }
+
         if (!$this->isVerified) {
             session()->flash('error', 'Please verify your matriculation number first.');
             return;

@@ -79,8 +79,13 @@ class Login extends Component
             ->first();
 
         if ($admin) {
-            $this->isAdmin = true;
+            // Step 1: First "Continue" just reveals the password field — no error yet.
+            if (!$this->isAdmin) {
+                $this->isAdmin = true;
+                return;
+            }
 
+            // Step 2: Password field is visible — now verify it.
             $this->validate([
                 'password' => 'required|string',
             ]);

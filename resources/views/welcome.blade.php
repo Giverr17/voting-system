@@ -52,10 +52,12 @@
                         Login
                     </a>
 
-                    <a href="{{ route('register-index') }}"
-                        class="text-gray-700 font-medium hover:text-blue-600 transition">
-                        Register
-                    </a>
+                    @if (\App\Models\Setting::isRegistrationOpen())
+                        <a href="{{ route('register-index') }}"
+                            class="text-gray-700 font-medium hover:text-blue-600 transition">
+                            Register
+                        </a>
+                    @endif
                 @endauth
             </div>
 
