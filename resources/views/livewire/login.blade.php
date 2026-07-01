@@ -91,11 +91,11 @@
                     </div>
                 @endif
 
-                {{-- OTP Code --}}
+                {{-- Entry Password --}}
                 @if($showCodeField)
                     <div class="animate-fadeIn">
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            Your Voting Code
+                            Your Entry Password
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -108,7 +108,7 @@
                                 type="text"
                                 wire:model="code"
                                 maxlength="6"
-                                placeholder="Enter OTP"
+                                placeholder="Enter entry password"
                                 class="w-full pl-10 pr-4 py-3 border border-gray-300 text-center tracking-widest rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition uppercase font-mono text-lg"
                             >
                         </div>
@@ -116,7 +116,7 @@
                             <svg class="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
-                            You're eligible to vote. Check your email for the OTP.
+                            You're eligible to vote. Check your email for the entry password.
                         </p>
                     </div>
                 @endif
@@ -145,7 +145,7 @@
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        {{ ($showCodeField || $isAdmin) ? 'Logging in...' : 'Sending OTP...' }}
+                        {{ ($showCodeField || $isAdmin) ? 'Logging in...' : 'Sending password...' }}
                     </span>
                 </button>
 

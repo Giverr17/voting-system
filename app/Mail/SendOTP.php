@@ -27,7 +27,7 @@ class SendOTP extends Mailable implements ShouldQueue
                 'contact@aces-portal.com',
                 'Aces Portal'
             ),
-            subject: 'OTP Message',
+            subject: 'Your Voting Entry Password',
         );
     }
 

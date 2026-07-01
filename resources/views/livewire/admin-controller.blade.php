@@ -185,55 +185,50 @@
         <!-- Pre-Registered Users Section -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden" id="pre-users"
             wire:key="prereg-container" wire:loading.class="opacity-50" wire:target="preRegPage,searchReg">
-            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                <div class="flex justify-between items-center">
+            <div class="border-b border-gray-200 bg-gray-50 px-4 sm:px-6 py-4">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                     <div>
                         <h2 class="text-lg font-semibold text-gray-900">Pre-Registered Users</h2>
                         <p class="text-sm text-gray-600 mt-1">Review and approve pending registrations</p>
                     </div>
-                    <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                            {{-- Actions --}}
-                            <div class="flex items-center gap-3">
+                    {{-- Actions --}}
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
 
-                                {{-- Search --}}
-                                <input type="text" wire:model.live.debounce.300ms="searchReg"
-                                    placeholder="Search by Mat No..."
-                                    class="px-4 py-2 border border-gray-300 rounded-lg
-                                           focus:ring-2 focus:ring-purple-500 w-56">
+                        {{-- Search --}}
+                        <input type="text" wire:model.live.debounce.300ms="searchReg"
+                            placeholder="Search by Mat No..."
+                            class="flex-1 sm:flex-none px-4 py-2 border border-gray-300 rounded-lg
+                                   focus:ring-2 focus:ring-purple-500 w-full sm:w-56">
 
-                                {{-- Upload CSV --}}
-                                <form method="POST" action="{{ route('add-preUsers') }}" enctype="multipart/form-data"
-                                    x-data class="relative">
-                                    @csrf
+                        {{-- Upload CSV --}}
+                        <form method="POST" action="{{ route('add-preUsers') }}" enctype="multipart/form-data"
+                            x-data class="relative shrink-0">
+                            @csrf
 
-                                    {{-- Hidden File Input --}}
-                                    <input type="file" name="csv_file" required class="hidden" x-ref="file"
-                                        @change="$el.form.submit()">
+                            {{-- Hidden File Input --}}
+                            <input type="file" name="csv_file" required class="hidden" x-ref="file"
+                                @change="$el.form.submit()">
 
-                                    {{-- Plus Button --}}
-                                    <button type="button" @click="$refs.file.click()"
-                                        class="inline-flex items-center justify-center
-                                                   w-10 h-10 rounded-lg
-                                                   bg-blue-600 hover:bg-blue-700
-                                                   text-white transition shadow-sm"
-                                        title="Upload Pre-Registration CSV">
+                            {{-- Plus Button --}}
+                            <button type="button" @click="$refs.file.click()"
+                                class="inline-flex items-center justify-center
+                                           w-10 h-10 rounded-lg
+                                           bg-blue-600 hover:bg-blue-700
+                                           text-white transition shadow-sm"
+                                title="Upload Pre-Registration CSV">
 
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                                            viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                        </svg>
-                                    </button>
-                                </form>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                </svg>
+                            </button>
+                        </form>
 
-                            </div>
-                        </div>
                     </div>
-
                 </div>
             </div>
 
-            <div class="overflow-x-auto"x>
+            <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
@@ -293,17 +288,17 @@
         {{-- Users Registered --}}
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden"
             wire:loading.class="opacity-50" wire:target="userPage,userSearch">
-            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                <div class="flex justify-between items-center">
+            <div class="border-b border-gray-200 bg-gray-50 px-4 sm:px-6 py-4">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                     <div>
                         <h2 class="text-lg font-semibold text-gray-900">Registered Users</h2>
                         <p class="text-sm text-gray-600 mt-1">Review and approve registrations</p>
                     </div>
-                    <div class="flex gap-3">
+                    <div class="flex gap-3 w-full sm:w-auto">
                         <input type="text" wire:model.live="userSearch" placeholder="Search by Mat No..."
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                            class="flex-1 sm:w-56 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
                         <button
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+                            class="shrink-0 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
                             Filter
                         </button>
                     </div>
@@ -389,18 +384,18 @@
                     {{ $users->onEachSide(1)->links(data:['scrollTo'=>false]) }}
                 </div>
             @endif
+        </div>
 
-
-            <!-- Candidates Section -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                    <div class="flex justify-between items-center">
+        <!-- Candidates Section -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                <div class="border-b border-gray-200 bg-gray-50 px-4 sm:px-6 py-4">
+                    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                         <div>
                             <h2 class="text-lg font-semibold text-gray-900">Candidates</h2>
                             <p class="text-sm text-gray-600 mt-1">Manage election candidates and positions</p>
                         </div>
-                        <a href="{{ route('add-candidate') }}"> <button
-                                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+                        <a href="{{ route('add-candidate') }}" class="w-full sm:w-auto"> <button
+                                class="w-full sm:w-auto justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4v16m8-8H4">

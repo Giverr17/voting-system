@@ -41,11 +41,11 @@ class Login extends Component
         for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
             try {
                 Mail::to($user->email)->queue(new SendOTP($user));
-                $this->emailMessage = 'OTP has been sent to your email';
+                $this->emailMessage = 'Your entry password has been sent to your email';
                 return true;
             } catch (\Exception $e) {
                 $lastException = $e;
-                \Illuminate\Support\Facades\Log::warning("OTP send attempt {$attempt}/{$maxAttempts} failed for {$user->email}: " . $e->getMessage());
+                \Illuminate\Support\Facades\Log::warning("Entry password send attempt {$attempt}/{$maxAttempts} failed for {$user->email}: " . $e->getMessage());
 
                 if ($attempt < $maxAttempts) {
                     usleep(500000); // 0.5 second pause between retries
@@ -54,8 +54,8 @@ class Login extends Component
         }
 
         // All attempts failed
-        \Illuminate\Support\Facades\Log::error("OTP send FAILED after {$maxAttempts} attempts for {$user->email}: " . ($lastException ? $lastException->getMessage() : 'Unknown error'));
-        $this->errorMessage = 'Failed to send OTP. Please try again.';
+        \Illuminate\Support\Facades\Log::error("Entry password send FAILED after {$maxAttempts} attempts for {$user->email}: " . ($lastException ? $lastException->getMessage() : 'Unknown error'));
+        $this->errorMessage = 'Failed to send entry password. Please try again.';
         // Reset the code so user can retry
         $user->update(['code' => null]);
         return false;
@@ -123,30 +123,30 @@ class Login extends Component
             return;
         }
 
-        // --- Step 1: If no code field shown yet, send OTP ---
+        // --- Step 1: If no entry-password field shown yet, send it ---
         if (!$this->showCodeField) {
-            // User already has a code from a previous attempt
+            // User already has an entry password from a previous attempt
             if ($user->code) {
                 $this->showCodeField = true;
-                $this->emailMessage = 'An OTP was already sent to your email. Enter it below.';
+                $this->emailMessage = 'An entry password was already sent to your email. Enter it below.';
                 return;
             }
 
-            // Generate and send new OTP
+            // Generate and send a new entry password
             if ($this->sendOtp($user)) {
                 $this->showCodeField = true;
             }
             return;
         }
 
-        // --- Step 2: Verify OTP code ---
+        // --- Step 2: Verify entry password ---
         if (empty($this->code)) {
-            $this->addError('identifier', 'Please enter the voting code sent to your email');
+            $this->addError('identifier', 'Please enter the entry password sent to your email');
             return;
         }
 
         if ($user->code !== strtoupper(trim($this->code))) {
-            $this->addError('identifier', 'Invalid voting code');
+            $this->addError('identifier', 'Invalid entry password');
             return;
         }
 

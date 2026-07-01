@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>OTP</title>
+    <title>Voting Entry Password</title>
 </head>
 <body style="background-color:#f3f4f6; padding:40px; font-family:Arial, sans-serif;">
 
@@ -28,16 +28,16 @@
 
                             <p style="color:#4b5563; font-size:15px; line-height:1.6;">
                                 Thank you for registering in the election.
-                                Please use the OTP below to login and cast your vote.
+                                Please use the entry password below to login and cast your vote.
                             </p>
                         </td>
                     </tr>
 
-                    {{-- OTP Code --}}
+                    {{-- Entry Password --}}
                     <tr>
                         <td style="text-align:center; padding:30px 0;">
                             <p style="color:#6b7280; font-size:14px; margin-bottom:12px;">
-                                Your One-Time Password
+                                Your Voting Entry Password
                             </p>
                             <div style="
                                 display:inline-block;
@@ -57,7 +57,7 @@
                                 </span>
                             </div>
                             <p style="color:#9ca3af; font-size:12px; margin-top:12px;">
-                                Do not share this code with anyone
+                                Do not share this password with anyone
                             </p>
                         </td>
                     </tr>
@@ -72,7 +72,7 @@
                             margin-bottom:20px;
                         ">
                             <p style="color:#713f12; font-size:13px; margin:0;">
-                                ⚠️ This code is unique to you. Keep it safe and do not share it.
+                                ⚠️ This password is unique to you. Keep it safe and do not share it.
                             </p>
                         </td>
                     </tr>
