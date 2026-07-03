@@ -26,9 +26,6 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware('no-cache')->name('welcome');
 
-Route::get('/results/{token}', LivewireLiveResults::class)
-    ->name('results.show');
-
 Route::get('/test', function () {
     return view('success');
 });
@@ -70,6 +67,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.index');
     })->name('admin-index');
+
+    Route::get('/admin/results', LivewireLiveResults::class)->name('admin-results');
 
     Route::post('/add-PreUsers', [AdminController::class, 'addPreUsers'])->name('add-preUsers');
 

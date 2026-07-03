@@ -22,6 +22,11 @@ class Login extends Component
     public $errorMessage = '';
     public $emailMessage = '';
 
+    // Resend throttling: how long (seconds) the resend button stays disabled
+    // after each send, and the epoch timestamp when it becomes available again.
+    public $resendCooldown = 60;
+    public $resendEndsAt = 0;
+
     /**
      * Removed wire:model.live — no more auto-lookup while typing.
      * Everything now happens when the user clicks Login.
@@ -135,6 +140,8 @@ class Login extends Component
             // Generate and send a new entry password
             if ($this->sendOtp($user)) {
                 $this->showCodeField = true;
+                // Start the resend cooldown — they just received an email.
+                $this->resendEndsAt = now()->addSeconds($this->resendCooldown)->timestamp;
             }
             return;
         }
@@ -154,6 +161,55 @@ class Login extends Component
         Auth::login($user);
         session()->flash('success', 'Login successful!');
         return redirect('/vote');
+    }
+
+    public function resendCode()
+    {
+        $this->resetValidation();
+        $this->errorMessage = '';
+        $this->emailMessage = '';
+
+        // Only relevant once the entry-password step is active.
+        if (!$this->showCodeField) {
+            return;
+        }
+
+        // Server-side cooldown guard (the button is also disabled client-side).
+        if ($this->resendEndsAt && now()->timestamp < $this->resendEndsAt) {
+            $this->errorMessage = 'Please wait before requesting another entry password.';
+            return;
+        }
+
+        $value = trim($this->identifier);
+
+        $user = User::where(function ($query) use ($value) {
+            $query->where('mat_no', $value)
+                ->orWhere('email', $value);
+        })->where('role', 'user')
+            ->with('preRegistration')
+            ->first();
+
+        // Re-run the same eligibility checks as login().
+        if (!$user) {
+            $this->errorMessage = 'User not found';
+            return;
+        }
+
+        if ($user->has_voted) {
+            $this->errorMessage = 'User has already voted';
+            return;
+        }
+
+        if (!$user->preRegistration || $user->preRegistration->status !== PreRegistrationStatus::APPROVED) {
+            $this->errorMessage = 'Your registration is not yet approved';
+            return;
+        }
+
+        // Generate a fresh entry password (this replaces any previous one) and email it.
+        if ($this->sendOtp($user)) {
+            $this->emailMessage = 'A new entry password has been sent to your email';
+            $this->resendEndsAt = now()->addSeconds($this->resendCooldown)->timestamp;
+        }
     }
 
     public function render()

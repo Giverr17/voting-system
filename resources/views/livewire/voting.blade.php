@@ -59,7 +59,7 @@
 
                     @if ($this->hasVotedForPosition($position->value))
                         <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                            ✓ Voted
+                            ✓ Selected
                         </span>
                     @else
                         <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -76,8 +76,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            <p class="text-gray-600 text-lg font-medium">You have already voted for this position.</p>
-                            <p class="text-gray-500 text-sm mt-2">Thank you for participating! 🎉</p>
+                            <p class="text-gray-600 text-lg font-medium">Your choice for this position is locked in.</p>
+                            <p class="text-gray-500 text-sm mt-2">Your vote is not cast until you submit all positions below.</p>
                         </div>
                     @else
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
@@ -161,7 +161,7 @@
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition-colors
                                 {{ !isset($selectedCandidates[$position->value]) ? 'opacity-50 cursor-not-allowed' : '' }}"
                             {{ !isset($selectedCandidates[$position->value]) ? 'disabled' : '' }}>
-                            Submit Vote for {{ $position->label() }}
+                            Lock in choice for {{ $position->label() }}
                         </button>
                     @endif
                 </div>
@@ -173,9 +173,9 @@
                 @if ($this->votingCompleted)
                     <div
                         class="w-full max-w-md bg-green-100 border border-green-300 text-green-800 px-6 py-4 rounded-xl font-medium">
-                        ✅ Voting completed successfully  
+                        ✅ Voting completed successfully
                         <p class="text-sm mt-1">
-                            Please check your email to view the live results.
+                            Thank you for voting. Results will be announced by the election committee.
                         </p>
                     </div>
             

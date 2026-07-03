@@ -118,6 +118,31 @@
                             </svg>
                             You're eligible to vote. Check your email for the entry password.
                         </p>
+
+                        {{-- Resend entry password (repeatable, with a cooldown countdown) --}}
+                        <div class="mt-3 text-center text-sm"
+                            wire:key="resend-{{ $resendEndsAt }}"
+                            x-data="{ endsAt: {{ $resendEndsAt }}, now: Math.floor(Date.now() / 1000) }"
+                            x-init="setInterval(() => now = Math.floor(Date.now() / 1000), 1000)">
+
+                            <span class="text-gray-500">Didn't get the email?</span>
+
+                            {{-- Active resend link --}}
+                            <button type="button"
+                                x-show="now >= endsAt"
+                                wire:click="resendCode"
+                                wire:loading.attr="disabled"
+                                wire:target="resendCode"
+                                class="text-blue-600 hover:text-blue-700 font-medium hover:underline disabled:opacity-60">
+                                <span wire:loading.remove wire:target="resendCode">Resend entry password</span>
+                                <span wire:loading wire:target="resendCode">Sending...</span>
+                            </button>
+
+                            {{-- Cooldown countdown --}}
+                            <span x-show="now < endsAt" x-cloak class="text-gray-400">
+                                Resend in <span x-text="Math.max(0, endsAt - now)"></span>s
+                            </span>
+                        </div>
                     </div>
                 @endif
 

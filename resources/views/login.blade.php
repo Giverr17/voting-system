@@ -8,6 +8,10 @@
     <title>Login</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
+        [x-cloak] {
+            display: none !important;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
