@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\PreRegistrationStatus;
+use App\Enums\Role;
 use App\Http\Requests\AddCandidate;
 use App\Http\Requests\EditPreUsers;
 use App\Http\Requests\EditUser;
@@ -10,6 +11,7 @@ use App\Models\Candidate;
 use App\Models\PreRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -62,6 +64,84 @@ class AdminController extends Controller
         }
         fclose($file);
         return back()->with('add-pre-users', "CSV uploaded successfully. {$imported} imported, {$skipped} skipped.");
+    }
+
+    /**
+     * Bulk-import fully-onboarded voters who skip the registration stage.
+     *
+     * Expected CSV columns (with header row):
+     *   full_name, mat_no, email, spe_id, department, level
+     *
+     * Each imported voter is created already APPROVED (via an APPROVED
+     * PreRegistration), so they only need to log in with their SPE ID, receive
+     * an entry password and vote.
+     */
+    public function addFullUsers(Request $request)
+    {
+        $request->validate([
+            'full_users_csv' => 'required|file|mimes:csv,txt'
+        ]);
+
+        $file = fopen($request->file('full_users_csv'), 'r');
+
+        // Skip BOM if present (common in Excel-exported CSVs)
+        $bom = fread($file, 3);
+        if ($bom !== "\xEF\xBB\xBF") {
+            rewind($file);
+        }
+
+        fgetcsv($file); // skip header row
+
+        $imported = 0;
+        $skipped = 0;
+
+        while (($row = fgetcsv($file)) !== false) {
+            $matNo = isset($row[1]) ? strtoupper(trim($row[1])) : '';
+            $speId = isset($row[3]) ? trim($row[3]) : '';
+
+            // mat_no and spe_id are mandatory (spe_id is the login key).
+            if (count($row) < 6 || $matNo === '' || $speId === '') {
+                $skipped++;
+                continue;
+            }
+
+            $fullName   = trim($row[0]);
+            $email      = trim($row[2]);
+            $department = trim($row[4]);
+            $level      = trim($row[5]);
+
+            try {
+                DB::transaction(function () use ($fullName, $matNo, $email, $speId, $department, $level) {
+                    $pre = PreRegistration::updateOrCreate(
+                        ['mat_no' => $matNo],
+                        ['full_name' => $fullName, 'status' => PreRegistrationStatus::APPROVED]
+                    );
+
+                    User::updateOrCreate(
+                        ['mat_no' => $matNo],
+                        [
+                            'pre_registration_id' => $pre->id,
+                            'username'   => $fullName,
+                            'email'      => $email !== '' ? $email : null,
+                            'spe_id'     => $speId,
+                            'department' => $department,
+                            'level'      => $level,
+                            'role'       => Role::USER->value,
+                            'has_voted'  => false,
+                        ]
+                    );
+                });
+
+                $imported++;
+            } catch (\Throwable $th) {
+                // A duplicate email/spe_id or bad row is skipped, not fatal.
+                Log::warning("Full-user import skipped row (mat_no {$matNo}): " . $th->getMessage());
+                $skipped++;
+            }
+        }
+
+        fclose($file);
+        return back()->with('add-full-users', "Voters imported successfully. {$imported} imported, {$skipped} skipped.");
     }
 
 

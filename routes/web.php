@@ -72,6 +72,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::post('/add-PreUsers', [AdminController::class, 'addPreUsers'])->name('add-preUsers');
 
+    Route::post('/add-full-users', [AdminController::class, 'addFullUsers'])->name('add-full-users');
+
     Route::get('/add-candidate', [AddCandidate::class, 'viewCandidate'])->name('add-candidate');
 
     Route::post('/add-candidate', [AddCandidate::class, 'store'])

@@ -24,6 +24,7 @@ class User extends Authenticatable
         'username',
         'pre_registration_id',
         'mat_no',
+        'spe_id',
         'email',
         'password',
         'code',
