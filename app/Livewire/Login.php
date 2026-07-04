@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Enums\PreRegistrationStatus;
-use App\Jobs\SendOtp as JobsSendOtp;
 use App\Mail\SendOTP;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +44,7 @@ class Login extends Component
 
         for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
             try {
-                Mail::to($user->email)->queue(new SendOTP($user));
+                Mail::to($user->email)->send(new SendOTP($user));
                 $this->emailMessage = 'Your entry password has been sent to your email';
                 return true;
             } catch (\Exception $e) {
