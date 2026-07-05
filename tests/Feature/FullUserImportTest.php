@@ -72,3 +72,40 @@ it('lets an imported voter log in with their SPE ID', function () {
     // An entry password was generated for that voter.
     expect(User::where('spe_id', 'SPE100')->first()->code)->not->toBeNull();
 });
+
+it('imports every voter even when mat_no is blank or duplicated (dedupes on SPE ID)', function () {
+    $admin = importAdmin();
+
+    $csv = "full_name,mat_no,email,spe_id,department,level\n"
+        . "Ann,DUP001,ann@example.com,SPE1,Comp,400\n"
+        . "Ben,DUP001,ben@example.com,SPE2,Comp,300\n"  // same mat_no, different SPE ID
+        . "Cid,,cid@example.com,SPE3,Comp,200\n";       // blank mat_no
+    $file = UploadedFile::fake()->createWithContent('voters.csv', $csv);
+
+    $this->actingAs($admin)
+        ->post(route('add-full-users'), ['full_users_csv' => $file])
+        ->assertRedirect();
+
+    // All three land as distinct voters — the old code would have collapsed
+    // the two DUP001 rows into one.
+    expect(User::where('role', 'user')->count())->toBe(3);
+    expect(User::where('spe_id', 'SPE3')->first()->mat_no)->toBeNull();
+});
+
+it('maps columns by header name regardless of order', function () {
+    $admin = importAdmin();
+
+    $csv = "spe_id,email,level,full_name,department,mat_no\n"
+        . "SPE9,zoe@example.com,500,Zoe,Civil,MAT9\n";
+    $file = UploadedFile::fake()->createWithContent('voters.csv', $csv);
+
+    $this->actingAs($admin)
+        ->post(route('add-full-users'), ['full_users_csv' => $file])
+        ->assertRedirect();
+
+    $zoe = User::where('spe_id', 'SPE9')->first();
+    expect($zoe)->not->toBeNull();
+    expect($zoe->username)->toBe('Zoe');
+    expect($zoe->mat_no)->toBe('MAT9');
+    expect($zoe->email)->toBe('zoe@example.com');
+});

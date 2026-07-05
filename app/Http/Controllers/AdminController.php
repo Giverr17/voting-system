@@ -90,58 +90,116 @@ class AdminController extends Controller
             rewind($file);
         }
 
-        fgetcsv($file); // skip header row
+        // --- Map columns by HEADER NAME (order-independent) ---
+        $header = fgetcsv($file);
+        if ($header === false) {
+            fclose($file);
+            return back()->with('error-full-users', 'The CSV file is empty.');
+        }
 
-        $imported = 0;
+        $normalize = fn($h) => preg_replace('/[^a-z0-9]/', '', strtolower((string) $h));
+
+        $aliases = [
+            'full_name'  => ['fullname', 'name', 'fullnames'],
+            'mat_no'     => ['matno', 'matricno', 'matricnumber', 'matriculation', 'matriculationnumber', 'matric', 'matnumber'],
+            'email'      => ['email', 'emailaddress', 'mail'],
+            'spe_id'     => ['speid', 'spe', 'speno', 'spenumber', 'speidno', 'speidnumber'],
+            'department' => ['department', 'dept', 'departmentname'],
+            'level'      => ['level', 'levels', 'classlevel'],
+        ];
+
+        $normalizedHeader = array_map($normalize, $header);
+        $col = [];
+        foreach ($aliases as $field => $names) {
+            foreach ($normalizedHeader as $i => $h) {
+                if (in_array($h, $names, true)) {
+                    $col[$field] = $i;
+                    break;
+                }
+            }
+        }
+
+        // spe_id is the login identity — it must be present.
+        if (!isset($col['spe_id'])) {
+            fclose($file);
+            return back()->with('error-full-users', 'CSV must include an "spe_id" column. Found headers: ' . implode(', ', $header));
+        }
+
+        $get = function (array $row, $field) use ($col) {
+            return isset($col[$field], $row[$col[$field]]) ? trim((string) $row[$col[$field]]) : '';
+        };
+
+        $created = 0;
+        $updated = 0;
         $skipped = 0;
 
         while (($row = fgetcsv($file)) !== false) {
-            $matNo = isset($row[1]) ? strtoupper(trim($row[1])) : '';
-            $speId = isset($row[3]) ? trim($row[3]) : '';
+            $speId = $get($row, 'spe_id');
 
-            // mat_no and spe_id are mandatory (spe_id is the login key).
-            if (count($row) < 6 || $matNo === '' || $speId === '') {
+            // spe_id is mandatory; everything else is optional.
+            if ($speId === '') {
                 $skipped++;
                 continue;
             }
 
-            $fullName   = trim($row[0]);
-            $email      = trim($row[2]);
-            $department = trim($row[4]);
-            $level      = trim($row[5]);
+            $fullName   = $get($row, 'full_name');
+            $matNo      = strtoupper($get($row, 'mat_no'));
+            $email      = $get($row, 'email');
+            $department = $get($row, 'department');
+            $level      = $get($row, 'level');
 
             try {
-                DB::transaction(function () use ($fullName, $matNo, $email, $speId, $department, $level) {
-                    $pre = PreRegistration::updateOrCreate(
-                        ['mat_no' => $matNo],
-                        ['full_name' => $fullName, 'status' => PreRegistrationStatus::APPROVED]
-                    );
+                // Dedupe on spe_id (the unique login key), NOT mat_no.
+                $outcome = DB::transaction(function () use ($speId, $matNo, $fullName, $email, $department, $level) {
+                    $existing = User::where('spe_id', $speId)->first();
+
+                    // Each voter gets their own APPROVED pre-registration so they
+                    // pass the existing login gate with no self-registration.
+                    $pre = $existing && $existing->pre_registration_id
+                        ? PreRegistration::find($existing->pre_registration_id)
+                        : null;
+
+                    if ($pre) {
+                        $pre->update([
+                            'full_name' => $fullName !== '' ? $fullName : $pre->full_name,
+                            'mat_no'    => $matNo !== '' ? $matNo : $pre->mat_no,
+                            'status'    => PreRegistrationStatus::APPROVED,
+                        ]);
+                    } else {
+                        $pre = PreRegistration::create([
+                            'mat_no'    => $matNo !== '' ? $matNo : null,
+                            'full_name' => $fullName !== '' ? $fullName : 'SPE ' . $speId,
+                            'status'    => PreRegistrationStatus::APPROVED,
+                        ]);
+                    }
 
                     User::updateOrCreate(
-                        ['mat_no' => $matNo],
+                        ['spe_id' => $speId],
                         [
                             'pre_registration_id' => $pre->id,
-                            'username'   => $fullName,
+                            'username'   => $fullName !== '' ? $fullName : ($existing->username ?? 'Voter'),
                             'email'      => $email !== '' ? $email : null,
-                            'spe_id'     => $speId,
+                            'mat_no'     => $matNo !== '' ? $matNo : null,
                             'department' => $department,
                             'level'      => $level,
                             'role'       => Role::USER->value,
-                            'has_voted'  => false,
+                            'has_voted'  => $existing->has_voted ?? false,
                         ]
                     );
+
+                    return $existing ? 'updated' : 'created';
                 });
 
-                $imported++;
+                $outcome === 'created' ? $created++ : $updated++;
             } catch (\Throwable $th) {
-                // A duplicate email/spe_id or bad row is skipped, not fatal.
-                Log::warning("Full-user import skipped row (mat_no {$matNo}): " . $th->getMessage());
+                // e.g. a duplicate email shared with a different voter — skip that row only.
+                Log::warning("Full-user import skipped row (spe_id {$speId}): " . $th->getMessage());
                 $skipped++;
             }
         }
 
         fclose($file);
-        return back()->with('add-full-users', "Voters imported successfully. {$imported} imported, {$skipped} skipped.");
+        return back()->with('add-full-users', "Import complete: {$created} added, {$updated} updated, {$skipped} skipped.");
     }
 
 

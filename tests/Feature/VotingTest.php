@@ -26,7 +26,7 @@ function seedCandidatesForTwoPositions(): array
 {
     $president = Candidate::create([
         'full_name'        => 'Alice',
-        'position_applied' => CandidatePosition::PRESIDENT->value,
+        'position_applied' => CandidatePosition::PRESIDENT_ELECT->value,
         'mat_no'           => 'CAND001',
         'department'       => 'Computer Engineering',
         'level'            => '400',
@@ -52,8 +52,8 @@ it('does NOT count a vote when only some positions are selected', function () {
 
     Livewire::actingAs($voter)->test(Voting::class)
         // select + lock in ONLY the president position
-        ->call('selectCandidate', CandidatePosition::PRESIDENT->value, $president->id)
-        ->call('submitVote', CandidatePosition::PRESIDENT->value)
+        ->call('selectCandidate', CandidatePosition::PRESIDENT_ELECT->value, $president->id)
+        ->call('submitVote', CandidatePosition::PRESIDENT_ELECT->value)
         // try to finish without selecting the other position
         ->call('finalizeVoting')
         ->assertSet('votingCompleted', false);
@@ -68,8 +68,8 @@ it('counts all votes atomically only when every position is selected', function 
     [$president, $vp] = seedCandidatesForTwoPositions();
 
     Livewire::actingAs($voter)->test(Voting::class)
-        ->call('selectCandidate', CandidatePosition::PRESIDENT->value, $president->id)
-        ->call('submitVote', CandidatePosition::PRESIDENT->value)
+        ->call('selectCandidate', CandidatePosition::PRESIDENT_ELECT->value, $president->id)
+        ->call('submitVote', CandidatePosition::PRESIDENT_ELECT->value)
         ->call('selectCandidate', CandidatePosition::VICE_PRESIDENT->value, $vp->id)
         ->call('submitVote', CandidatePosition::VICE_PRESIDENT->value)
         ->call('finalizeVoting')
@@ -77,7 +77,7 @@ it('counts all votes atomically only when every position is selected', function 
 
     // Exactly one vote per position, and the voter is now marked as voted.
     expect(Vote::count())->toBe(2);
-    expect(Vote::where('position', CandidatePosition::PRESIDENT->value)->count())->toBe(1);
+    expect(Vote::where('position', CandidatePosition::PRESIDENT_ELECT->value)->count())->toBe(1);
     expect(Vote::where('position', CandidatePosition::VICE_PRESIDENT->value)->count())->toBe(1);
     expect($voter->fresh()->has_voted)->toBeTruthy();
 });

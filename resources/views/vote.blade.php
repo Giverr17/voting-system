@@ -14,7 +14,7 @@
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10" />
+                <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo" class="h-10 w-auto" />
                 <h1 class="text-lg font-semibold text-gray-800">Class Election Voting System</h1>
             </div>
 

@@ -15,7 +15,10 @@
     {{-- Header --}}
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="font-bold text-lg">Class Election</h1>
+            <div class="flex items-center gap-3">
+                <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo" class="h-9 w-auto">
+                <h1 class="font-bold text-lg">Class Election</h1>
+            </div>
         </div>
     </header>
 

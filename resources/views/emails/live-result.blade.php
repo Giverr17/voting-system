@@ -15,7 +15,7 @@
 
                     <tr>
                         <td style="text-align:center;">
-                            <img src="{{ asset('images/Aces.png') }}" width="80" alt="Aces Portal Logo"
+                            <img src="{{ asset('images/spe-logo.png') }}" width="80" alt="SPE International Logo"
                                  style="margin-bottom:20px;">
                         </td>
                     </tr>

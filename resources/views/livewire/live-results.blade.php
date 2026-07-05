@@ -72,7 +72,13 @@
     <div class="rpt-wrap" wire:poll.3s="loadResults">
         <div class="rpt-report" id="results-report">
             <div class="rpt-header">
-                <p class="rpt-eyebrow">Official Tally</p>
+                <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+                    <span style="background:#ffffff; border-radius:12px; padding:8px 12px; display:inline-flex; align-items:center;">
+                        <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo"
+                            style="height:34px; width:auto; display:block;" crossorigin="anonymous">
+                    </span>
+                    <p class="rpt-eyebrow" style="margin:0;">Official Tally</p>
+                </div>
                 <h1 class="rpt-title">Class Election — Live Results</h1>
                 <p class="rpt-sub">Generated {{ now()->format('M j, Y · g:i A') }}</p>
                 <div class="rpt-stats">

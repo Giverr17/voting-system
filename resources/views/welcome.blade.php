@@ -16,7 +16,7 @@
 
             <!-- Left: Logo + Title -->
             <div class="flex items-center gap-3">
-                <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10" />
+                <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo" class="h-10 w-auto" />
                 <h1 class="text-lg font-semibold text-gray-800">
                      Class Election Voting System
                 </h1>
@@ -74,7 +74,7 @@
         <div class="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
 
             <!-- Center Logo -->
-            <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-32 h-32 mx-auto mb-6" />
+            <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo" class="h-24 w-auto mx-auto mb-6" />
 
             <h2 class="text-2xl font-bold text-gray-800 mb-3">
                 Welcome to the Voting Portal

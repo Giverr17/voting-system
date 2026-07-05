@@ -36,7 +36,10 @@ class AppServiceProvider extends ServiceProvider
         if (env('APP_ENV') !== 'local') {
             Schema::defaultStringLength(191);
         }
-         if (config('app.env') !== "production") {
+        // Force HTTPS everywhere except production. Set FORCE_HTTPS=false in your
+        // local .env (git-ignored) to disable it for local http:// testing.
+        // Defaults to true, so committed behaviour and production are unchanged.
+        if (config('app.env') !== "production" && env('FORCE_HTTPS', true)) {
             URL::forceScheme('https');
         }
     }

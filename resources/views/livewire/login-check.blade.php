@@ -1,6 +1,7 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-100 to-black-100 py-12 px-4">
     <div class="max-w-2xl mx-auto">
         <div class="bg-white rounded-2xl shadow-xl p-8">
+            <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo" class="h-16 w-auto mx-auto mb-4">
             <h1 class="text-3xl font-bold text-gray-800 mb-2 text-center">Student Registration</h1>
             <p class="text-gray-600 mb-8 text-center">Complete your registration to access the voting system</p>
 
