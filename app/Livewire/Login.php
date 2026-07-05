@@ -105,11 +105,8 @@ class Login extends Component
         }
 
         // --- Regular user login ---
-        $user = User::where(function ($query) use ($value) {
-            $query->where('mat_no', $value)
-                ->orWhere('email', $value)
-                ->orWhere('spe_id', $value);
-        })->where('role', 'user')
+        $user = User::where('spe_id', $value)
+            ->where('role', 'user')
             ->with('preRegistration')
             ->first();
 
@@ -182,11 +179,8 @@ class Login extends Component
 
         $value = trim($this->identifier);
 
-        $user = User::where(function ($query) use ($value) {
-            $query->where('mat_no', $value)
-                ->orWhere('email', $value)
-                ->orWhere('spe_id', $value);
-        })->where('role', 'user')
+        $user = User::where('spe_id', $value)
+            ->where('role', 'user')
             ->with('preRegistration')
             ->first();
 

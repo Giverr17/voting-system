@@ -19,10 +19,10 @@
             {{-- Form --}}
             <div class="space-y-4">
 
-                {{-- Email / Matric --}}
+                {{-- SPE ID --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Email or Matric Number
+                        SPE ID
                     </label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -35,7 +35,7 @@
                         <input
                             type="text"
                             wire:model="identifier"
-                            placeholder="john@example.com or MAT12345"
+                            placeholder="Enter your SPE ID"
                             class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             autocomplete="off"
                         >
