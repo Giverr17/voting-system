@@ -100,14 +100,10 @@
                          </a>
                      @endif
 
-                     <a href="{{ route('vote-audit') }}"
-                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
-                        Check Result
-                     </a> 
                      <a href="{{ route('check-candidate') }}"
                          class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
                          View Candidates
-                     </a> 
+                     </a>
               @else
                      <a href="{{ route('login') }}"
                        class="block w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium transition">
@@ -119,10 +115,6 @@
                          View Candidates
                      </a> 
 
-                     <!-- <a href="{{ route('vote-audit') }}"
-                         class="block w-full border border-gray-300 hover:bg-gray-100 text-gray-700 py-3 rounded-lg font-medium transition">
-                        Check Result
-                     </a> -->
                   @endauth
             </div>
 
