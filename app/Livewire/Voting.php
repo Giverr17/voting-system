@@ -44,13 +44,15 @@ class Voting extends Component
         }
 
         $this->checkVotedPosition();
+
+        // Restore in-progress selections from the session so they survive page reloads
+        $sessionKey = 'voting_selections_' . Auth::id();
+        $this->selectedCandidates = session($sessionKey . '_candidates', []);
     }
     //check if the user has voted and not allowed to vote
     public  function checkVotedPosition()
     {
-        $userMatNo = Auth::user()->mat_no;
-
-        $this->votedPositions = Vote::where('mat_no', $userMatNo)
+        $this->votedPositions = Vote::where('user_id', Auth::id())
             ->pluck('position')
             ->toArray();
     }
@@ -65,6 +67,10 @@ class Voting extends Component
         }
 
         $this->selectedCandidates[$position] = $candidate_id;
+
+        // Persist to session so selection survives page reload
+        $sessionKey = 'voting_selections_' . Auth::id();
+        session([$sessionKey . '_candidates' => $this->selectedCandidates]);
 
         $this->message = '';
     }
@@ -90,10 +96,11 @@ class Voting extends Component
             return;
         }
 
-        // Lock the choice in memory only — nothing is written to the database
+        // Lock the choice in memory and session — nothing is written to the database
         // and nothing counts until every position is selected and the voter
         // finalizes (see finalizeVoting).
         $this->votedPositions[] = $position;
+
 
         $this->message = "Choice locked in for {$this->positionLabel($position)}. Your vote is not cast until you submit all positions.";
         $this->messageType = 'success';
@@ -147,6 +154,10 @@ class Voting extends Component
         $this->votingCompleted = true;
         $this->message = "Voting completed successfully!";
         $this->messageType = 'success';
+
+        // Clear session data — votes are now persisted in the database
+        $sessionKey = 'voting_selections_' . Auth::id();
+        session()->forget($sessionKey . '_candidates');
 
         Log::info('Vote finalized for: ' . $user->mat_no);
     }
