@@ -17,7 +17,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-3">
-                    <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo" class="h-10 w-auto">
+                    <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="h-10 w-auto">
                     <div>
                         <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
                         <p class="text-sm text-gray-600 mt-1">Manage voting system and user registrations</p>

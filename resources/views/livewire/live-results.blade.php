@@ -72,7 +72,7 @@
             <div class="rpt-header">
                 <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
                     <span style="background:#ffffff; border-radius:12px; padding:8px 12px; display:inline-flex; align-items:center;">
-                        <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo"
+                        <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo"
                             style="height:34px; width:auto; display:block;">
                     </span>
                     <p class="rpt-eyebrow" style="margin:0;">Official Tally</p>
@@ -188,7 +188,7 @@
                 var img = new Image();
                 img.onload = function () { resolve(img); };
                 img.onerror = function () { console.warn('[SPE Report v3] Logo failed to load'); resolve(null); };
-                img.src = '{{ asset("images/spe-logo.png") }}';
+                img.src = '{{ asset("images/Aces.png") }}';
             });
 
             /* ─── 3. Layout constants ─── */
@@ -471,7 +471,7 @@
                 var slug = new Date().toISOString().slice(0, 10);
                 var sfx = pages.length > 1 ? '-page' + (p + 1) : '';
                 var link = document.createElement('a');
-                link.download = 'spe-election-results-' + slug + sfx + '.png';
+                link.download = 'aces-election-results-' + slug + sfx + '.png';
                 link.href = canvas.toDataURL('image/png');
                 document.body.appendChild(link);
                 link.click();

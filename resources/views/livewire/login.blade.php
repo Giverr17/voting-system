@@ -11,7 +11,7 @@
 
             {{-- Header --}}
             <div class="text-center mb-8">
-                <img src="{{ asset('images/spe-logo.png') }}" alt="SPE International Logo" class="h-16 w-auto mx-auto mb-4">
+                <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="h-16 w-auto mx-auto mb-4">
                 <h2 class="text-3xl font-bold text-gray-800">Election Login</h2>
                 <p class="text-gray-500 text-sm mt-2">Enter your credentials to continue</p>
             </div>
