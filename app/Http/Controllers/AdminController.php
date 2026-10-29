@@ -70,10 +70,10 @@ class AdminController extends Controller
      * Bulk-import fully-onboarded voters who skip the registration stage.
      *
      * Expected CSV columns (with header row):
-     *   full_name, mat_no, email, spe_id, department, level
+     *   full_name, mat_no, email, department, level
      *
      * Each imported voter is created already APPROVED (via an APPROVED
-     * PreRegistration), so they only need to log in with their SPE ID, receive
+     * PreRegistration), so they only need to log in with their Mat No, receive
      * an entry password and vote.
      */
     public function addFullUsers(Request $request)
@@ -119,10 +119,10 @@ class AdminController extends Controller
             }
         }
 
-        // spe_id is the login identity — it must be present.
-        if (!isset($col['spe_id'])) {
+        // mat_no is the login identity — it must be present.
+        if (!isset($col['mat_no'])) {
             fclose($file);
-            return back()->with('error-full-users', 'CSV must include an "spe_id" column. Found headers: ' . implode(', ', $header));
+            return back()->with('error-full-users', 'CSV must include a "mat_no" column. Found headers: ' . implode(', ', $header));
         }
 
         $get = function (array $row, $field) use ($col) {
@@ -134,24 +134,23 @@ class AdminController extends Controller
         $skipped = 0;
 
         while (($row = fgetcsv($file)) !== false) {
-            $speId = $get($row, 'spe_id');
+            $matNo = strtoupper($get($row, 'mat_no'));
 
-            // spe_id is mandatory; everything else is optional.
-            if ($speId === '') {
+            // mat_no is mandatory; everything else is optional.
+            if ($matNo === '') {
                 $skipped++;
                 continue;
             }
 
             $fullName   = $get($row, 'full_name');
-            $matNo      = strtoupper($get($row, 'mat_no'));
             $email      = $get($row, 'email');
             $department = $get($row, 'department');
             $level      = $get($row, 'level');
 
             try {
-                // Dedupe on spe_id (the unique login key), NOT mat_no.
-                $outcome = DB::transaction(function () use ($speId, $matNo, $fullName, $email, $department, $level) {
-                    $existing = User::where('spe_id', $speId)->first();
+                // Dedupe on mat_no (the unique login key).
+                $outcome = DB::transaction(function () use ($matNo, $fullName, $email, $department, $level) {
+                    $existing = User::where('mat_no', $matNo)->first();
 
                     // Each voter gets their own APPROVED pre-registration so they
                     // pass the existing login gate with no self-registration.
@@ -162,24 +161,23 @@ class AdminController extends Controller
                     if ($pre) {
                         $pre->update([
                             'full_name' => $fullName !== '' ? $fullName : $pre->full_name,
-                            'mat_no'    => $matNo !== '' ? $matNo : $pre->mat_no,
+                            'mat_no'    => $matNo,
                             'status'    => PreRegistrationStatus::APPROVED,
                         ]);
                     } else {
                         $pre = PreRegistration::create([
-                            'mat_no'    => $matNo !== '' ? $matNo : null,
-                            'full_name' => $fullName !== '' ? $fullName : 'SPE ' . $speId,
+                            'mat_no'    => $matNo,
+                            'full_name' => $fullName !== '' ? $fullName : 'Voter ' . $matNo,
                             'status'    => PreRegistrationStatus::APPROVED,
                         ]);
                     }
 
                     User::updateOrCreate(
-                        ['spe_id' => $speId],
+                        ['mat_no' => $matNo],
                         [
                             'pre_registration_id' => $pre->id,
                             'username'   => $fullName !== '' ? $fullName : ($existing->username ?? 'Voter'),
                             'email'      => $email !== '' ? $email : null,
-                            'mat_no'     => $matNo !== '' ? $matNo : null,
                             'department' => $department,
                             'level'      => $level,
                             'role'       => Role::USER->value,
@@ -193,7 +191,7 @@ class AdminController extends Controller
                 $outcome === 'created' ? $created++ : $updated++;
             } catch (\Throwable $th) {
                 // e.g. a duplicate email shared with a different voter — skip that row only.
-                Log::warning("Full-user import skipped row (spe_id {$speId}): " . $th->getMessage());
+                Log::warning("Full-user import skipped row (mat_no {$matNo}): " . $th->getMessage());
                 $skipped++;
             }
         }

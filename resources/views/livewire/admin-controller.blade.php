@@ -2,7 +2,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Top actions -->
         <div class="mb-6 flex flex-col sm:flex-row sm:justify-end gap-3">
-            {{-- Bulk import fully-onboarded voters (skip registration; login via SPE ID) --}}
+            {{-- Bulk import fully-onboarded voters (skip registration; login via Mat No) --}}
             <form method="POST" action="{{ route('add-full-users') }}" enctype="multipart/form-data"
                 x-data class="w-full sm:w-auto">
                 @csrf
@@ -10,12 +10,12 @@
                     @change="$el.form.submit()">
                 <button type="button" @click="$refs.fullUsers.click()"
                     class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm transition"
-                    title="CSV columns: full_name, mat_no, email, spe_id, department, level">
+                    title="CSV columns: full_name, mat_no, email, department, level">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
-                    Import Voters (SPE ID)
+                    Import Voters (Mat No)
                 </button>
             </form>
 

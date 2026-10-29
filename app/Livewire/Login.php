@@ -105,7 +105,7 @@ class Login extends Component
         }
 
         // --- Regular user login ---
-        $user = User::where('spe_id', $value)
+        $user = User::where('mat_no', strtoupper($value))
             ->where('role', 'user')
             ->with('preRegistration')
             ->first();
@@ -179,7 +179,7 @@ class Login extends Component
 
         $value = trim($this->identifier);
 
-        $user = User::where('spe_id', $value)
+        $user = User::where('mat_no', strtoupper($value))
             ->where('role', 'user')
             ->with('preRegistration')
             ->first();
