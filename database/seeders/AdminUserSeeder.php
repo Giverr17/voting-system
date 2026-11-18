@@ -18,19 +18,19 @@ class AdminUserSeeder extends Seeder
             ['email' => 'admin@election.com'],
             [
                 'username' => 'Election Admin',
-                'password' => Hash::make('34571411@Ab'),
+                'password' => Hash::make('masteradmin@123'),
                 'role' => 'admin',
             ]
         );
 
         // Second admin — EDIT these placeholder credentials before seeding.
         User::firstOrCreate(
-            ['email' => 'ebony@election.com'],
+            ['email' => 'secret@election.com'],
             [
                 'username' => 'Election Admin 2',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
-            ] 
+            ]
         );
     }
-}  
+}
