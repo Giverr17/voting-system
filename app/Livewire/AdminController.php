@@ -28,6 +28,7 @@ protected $scrollToTop = false;
     public $searchReg = '';
     public $userSearch = '';
     public $countPending = 0;
+    public $countRegistered = 0;
     public $countApproved = 0;
     public $countVote = 0;
     public $candidateVotes=[];
@@ -57,6 +58,7 @@ protected $scrollToTop = false;
     public function loadCounts()
     {
         $this->countPending = PreRegistration::where('status', 'pending')->count();
+        $this->countRegistered = PreRegistration::where('status', 'registered')->count();
         $this->countApproved = PreRegistration::where('status', 'approved')->count();
         $this->countVote=User::where('has_voted',true)->count();
     }
@@ -123,24 +125,35 @@ protected $scrollToTop = false;
         $candidate->delete();
     }
 
-   public function verifyUsers($id)
-{
-    $user = User::with('preRegistration')
-        ->whereHas('preRegistration', function ($q) {
-            $q->whereNotIn('status', [
-                PreRegistrationStatus::APPROVED,
-                PreRegistrationStatus::REJECTED,
-            ]);
-        })
-        ->where('id', $id)
-        ->firstOrFail();
+    public function verifyUsers($id)
+    {
+        // Only allow verifying users who have self-registered (REGISTERED status).
+        // PENDING means they haven't completed registration yet — not verifiable.
+        $user = User::with('preRegistration')
+            ->whereHas('preRegistration', function ($q) {
+                $q->where('status', PreRegistrationStatus::REGISTERED);
+            })
+            ->where('id', $id)
+            ->firstOrFail();
 
-    $user->preRegistration->update([
-        'status' => PreRegistrationStatus::APPROVED
-    ]);
+        $user->preRegistration->update([
+            'status' => PreRegistrationStatus::APPROVED
+        ]);
 
-    $this->loadCounts();
-}
+        $this->loadCounts();
+        session()->flash('verify-message', 'User verified successfully.');
+    }
+
+    public function verifyAllRegistered()
+    {
+        $count = \App\Models\PreRegistration::where('status', PreRegistrationStatus::REGISTERED)->count();
+
+        \App\Models\PreRegistration::where('status', PreRegistrationStatus::REGISTERED)
+            ->update(['status' => PreRegistrationStatus::APPROVED]);
+
+        $this->loadCounts();
+        session()->flash('verify-message', "{$count} registered user(s) have been verified and approved.");
+    }
 
     protected function getPreRegistrationQuery()
     {

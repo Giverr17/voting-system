@@ -23,7 +23,7 @@
                         </label>
                         <input type="text" value="{{ $user->full_name }}" id="username" name="full_name"
                             placeholder="Enter your fullname"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('username') border-red-500 @else border-gray-300 @enderror">
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('full_name') border-red-500 @else border-gray-300 @enderror">
                         @error('full_name')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -34,15 +34,22 @@
                         </label>
                         <input type="text" value="{{ $user->mat_no }}" id="mat_no" name="mat_no"
                             placeholder="Enter Matriculation Number"
-                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition">
+                            class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition @error('mat_no') border-red-500 @else border-gray-300 @enderror">
                         @error('mat_no')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    <!-- Submit Button -->
-                    <button type="submit"
-                        class="w-full bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition font-medium text-lg shadow-lg">
-                        Confirm </button>
+                    <!-- Action Buttons -->
+                    <div class="flex items-center justify-between gap-4 pt-4">
+                        <a href="{{ route('admin-index') }}"
+                            class="px-6 py-3.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition font-medium text-center">
+                            Go Back
+                        </a>
+                        <button type="submit"
+                            class="flex-1 bg-blue-600 text-white py-3.5 rounded-lg hover:bg-blue-700 transition font-medium text-lg shadow-lg">
+                            Confirm Changes
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -190,9 +190,11 @@
                                 </label>
                                 <select name="status"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
-                                    <option value="{{ $user->preRegistration->status }}">{{ $user->preRegistration->status }}</option>
-                                    <option value="{{ \App\Enums\PreRegistrationStatus::APPROVED }}">Approved</option>
-                                    <option value="{{ \App\Enums\PreRegistrationStatus::REJECTED }}">Rejected</option>
+                                    @foreach (\App\Enums\PreRegistrationStatus::cases() as $statusOption)
+                                        <option value="{{ $statusOption->value }}" {{ ($user->preRegistration?->status === $statusOption || $user->preRegistration?->status?->value === $statusOption->value) ? 'selected' : '' }}>
+                                            {{ $statusOption->label() }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('status')
                                     <small class="text-danger text-sm text-red-500">{{ $message }}</small>

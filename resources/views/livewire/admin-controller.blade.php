@@ -1,8 +1,9 @@
+
 <div wire:loading.class="opacity-50" wire:target="userPage,preRegPage">
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Top actions -->
         <div class="mb-6 flex flex-col sm:flex-row sm:justify-end gap-3">
-            {{-- Bulk import fully-onboarded voters (skip registration; login via Mat No) --}}
+            {{-- Bulk import pre-registered voters (uploaded to pre_registrations with PENDING status) --}}
             <form method="POST" action="{{ route('add-full-users') }}" enctype="multipart/form-data"
                 x-data class="w-full sm:w-auto">
                 @csrf
@@ -10,12 +11,12 @@
                     @change="$el.form.submit()">
                 <button type="button" @click="$refs.fullUsers.click()"
                     class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg shadow-sm transition"
-                    title="CSV columns: full_name, mat_no, email, department, level">
+                    title="CSV with headers: full_name, mat_no">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
-                    Import Voters (Mat No)
+                    Import Pre-Registration CSV
                 </button>
             </form>
 
@@ -42,12 +43,12 @@
         @endif
 
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
             <!-- Pending Approvals -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-600">Pending Approvals</p>
+                        <p class="text-sm font-medium text-gray-600">Pending (CSV)</p>
                         <p class="text-3xl font-bold text-amber-600 mt-2">{{ $countPending }}</p>
                     </div>
                     <div class="bg-amber-100 rounded-full p-3">
@@ -57,7 +58,24 @@
                         </svg>
                     </div>
                 </div>
-                <p class="text-xs text-gray-500 mt-4">Requires immediate attention</p>
+                <p class="text-xs text-gray-500 mt-4">Awaiting self-registration</p>
+            </div>
+
+            <!-- Self-Registered (awaiting verify) -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Awaiting Verify</p>
+                        <p class="text-3xl font-bold text-blue-600 mt-2">{{ $countRegistered }}</p>
+                    </div>
+                    <div class="bg-blue-100 rounded-full p-3">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <p class="text-xs text-gray-500 mt-4">Self-registered, needs admin verify</p>
             </div>
 
             <!-- Approved Voters -->
@@ -222,6 +240,17 @@
             </div>
         @endif
 
+        @if (session('verify-message'))
+            <div class="flex items-center gap-3 max-w-lg mx-auto mt-6 p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
+                <div class="flex items-center justify-center w-8 h-8 bg-green-600 text-white rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <p class="text-green-800 font-medium">{{ session('verify-message') }}</p>
+            </div>
+        @endif
+
 
         <!-- Pre-Registered Users Section -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden" id="pre-users"
@@ -335,13 +364,22 @@
                         <h2 class="text-lg font-semibold text-gray-900">Registered Users</h2>
                         <p class="text-sm text-gray-600 mt-1">Review and approve registrations</p>
                     </div>
-                    <div class="flex gap-3 w-full sm:w-auto">
+                    <div class="flex flex-wrap gap-3 w-full sm:w-auto items-center">
                         <input type="text" wire:model.live="userSearch" placeholder="Search by Mat No..."
                             class="flex-1 sm:w-56 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
-                        <button
-                            class="shrink-0 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                            Filter
-                        </button>
+
+                        {{-- Verify All Registered button --}}
+                        @if ($countRegistered > 0)
+                            <button wire:click="verifyAllRegistered" wire:loading.attr="disabled"
+                                wire:confirm="Verify all {{ $countRegistered }} self-registered user(s) at once?"
+                                class="shrink-0 inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 disabled:opacity-60 rounded-lg transition shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                                Verify All Registered
+                                <span class="ml-1 bg-white text-green-700 text-xs font-bold px-2 py-0.5 rounded-full">{{ $countRegistered }}</span>
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -389,18 +427,22 @@
                                 @endphp
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if ($status === \App\Enums\PreRegistrationStatus::APPROVED)
-                                        <button disabled class="bg-green-100 text-green-800 cursor-not-allowed">
+                                        <button disabled class="px-3 py-1.5 bg-green-100 text-green-800 rounded-lg cursor-not-allowed text-sm font-medium">
                                             ✓ Verified
                                         </button>
                                     @elseif ($status === \App\Enums\PreRegistrationStatus::REJECTED)
-                                        <button disabled class="bg-red-100 text-red-800 cursor-not-allowed">
-                                            ❌ Rejected
+                                        <button disabled class="px-3 py-1.5 bg-red-100 text-red-800 rounded-lg cursor-not-allowed text-sm font-medium">
+                                            ✗ Rejected
                                         </button>
-                                    @elseif($status)
+                                    @elseif ($status === \App\Enums\PreRegistrationStatus::REGISTERED)
                                         <button wire:click="verifyUsers({{ $user->id }})"
-                                            class="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                                            class="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-sm">
                                             Verify User
                                         </button>
+                                    @elseif ($status === \App\Enums\PreRegistrationStatus::PENDING)
+                                        <span class="px-3 py-1.5 bg-gray-100 text-gray-400 rounded-lg text-sm font-medium cursor-default">
+                                            Not Registered Yet
+                                        </span>
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">

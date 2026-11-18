@@ -67,14 +67,13 @@ class AdminController extends Controller
     }
 
     /**
-     * Bulk-import fully-onboarded voters who skip the registration stage.
+     * Import pre-registered voters from a CSV file.
      *
      * Expected CSV columns (with header row):
-     *   full_name, mat_no, email, department, level
+     *   full_name, mat_no, etc.
      *
-     * Each imported voter is created already APPROVED (via an APPROVED
-     * PreRegistration), so they only need to log in with their Mat No, receive
-     * an entry password and vote.
+     * Each imported voter is created in the pre_registrations table with PENDING status.
+     * They must register themselves at /register, after which an admin verifies them.
      */
     public function addFullUsers(Request $request)
     {
@@ -102,10 +101,6 @@ class AdminController extends Controller
         $aliases = [
             'full_name'  => ['fullname', 'name', 'fullnames'],
             'mat_no'     => ['matno', 'matricno', 'matricnumber', 'matriculation', 'matriculationnumber', 'matric', 'matnumber'],
-            'email'      => ['email', 'emailaddress', 'mail'],
-            'spe_id'     => ['speid', 'spe', 'speno', 'spenumber', 'speidno', 'speidnumber'],
-            'department' => ['department', 'dept', 'departmentname'],
-            'level'      => ['level', 'levels', 'classlevel'],
         ];
 
         $normalizedHeader = array_map($normalize, $header);
@@ -119,7 +114,7 @@ class AdminController extends Controller
             }
         }
 
-        // mat_no is the login identity — it must be present.
+        // mat_no is the identifier — it must be present.
         if (!isset($col['mat_no'])) {
             fclose($file);
             return back()->with('error-full-users', 'CSV must include a "mat_no" column. Found headers: ' . implode(', ', $header));
@@ -134,70 +129,40 @@ class AdminController extends Controller
         $skipped = 0;
 
         while (($row = fgetcsv($file)) !== false) {
-            $matNo = strtoupper($get($row, 'mat_no'));
+            $rawMatNo = $get($row, 'mat_no');
+            $matNo = strtoupper(trim(preg_replace('/[\x{FEFF}\x{200B}\x{00EF}\x{00BB}\x{00BF}]/u', '', $rawMatNo)));
 
-            // mat_no is mandatory; everything else is optional.
             if ($matNo === '') {
                 $skipped++;
                 continue;
             }
 
-            $fullName   = $get($row, 'full_name');
-            $email      = $get($row, 'email');
-            $department = $get($row, 'department');
-            $level      = $get($row, 'level');
+            $fullName = $get($row, 'full_name');
 
             try {
-                // Dedupe on mat_no (the unique login key).
-                $outcome = DB::transaction(function () use ($matNo, $fullName, $email, $department, $level) {
-                    $existing = User::where('mat_no', $matNo)->first();
+                $pre = PreRegistration::where('mat_no', $matNo)->first();
 
-                    // Each voter gets their own APPROVED pre-registration so they
-                    // pass the existing login gate with no self-registration.
-                    $pre = $existing && $existing->pre_registration_id
-                        ? PreRegistration::find($existing->pre_registration_id)
-                        : null;
-
-                    if ($pre) {
-                        $pre->update([
-                            'full_name' => $fullName !== '' ? $fullName : $pre->full_name,
-                            'mat_no'    => $matNo,
-                            'status'    => PreRegistrationStatus::APPROVED,
-                        ]);
-                    } else {
-                        $pre = PreRegistration::create([
-                            'mat_no'    => $matNo,
-                            'full_name' => $fullName !== '' ? $fullName : 'Voter ' . $matNo,
-                            'status'    => PreRegistrationStatus::APPROVED,
-                        ]);
-                    }
-
-                    User::updateOrCreate(
-                        ['mat_no' => $matNo],
-                        [
-                            'pre_registration_id' => $pre->id,
-                            'username'   => $fullName !== '' ? $fullName : ($existing->username ?? 'Voter'),
-                            'email'      => $email !== '' ? $email : null,
-                            'department' => $department,
-                            'level'      => $level,
-                            'role'       => Role::USER->value,
-                            'has_voted'  => $existing->has_voted ?? false,
-                        ]
-                    );
-
-                    return $existing ? 'updated' : 'created';
-                });
-
-                $outcome === 'created' ? $created++ : $updated++;
+                if ($pre) {
+                    $pre->update([
+                        'full_name' => $fullName !== '' ? $fullName : $pre->full_name,
+                    ]);
+                    $updated++;
+                } else {
+                    PreRegistration::create([
+                        'mat_no'    => $matNo,
+                        'full_name' => $fullName !== '' ? $fullName : 'Voter ' . $matNo,
+                        'status'    => PreRegistrationStatus::PENDING,
+                    ]);
+                    $created++;
+                }
             } catch (\Throwable $th) {
-                // e.g. a duplicate email shared with a different voter — skip that row only.
-                Log::warning("Full-user import skipped row (mat_no {$matNo}): " . $th->getMessage());
+                Log::warning("Pre-registration CSV import skipped row (mat_no {$matNo}): " . $th->getMessage());
                 $skipped++;
             }
         }
 
         fclose($file);
-        return back()->with('add-full-users', "Import complete: {$created} added, {$updated} updated, {$skipped} skipped.");
+        return back()->with('add-full-users', "Pre-registration CSV imported successfully: {$created} added, {$updated} updated, {$skipped} skipped.");
     }
 
 
