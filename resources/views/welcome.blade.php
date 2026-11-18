@@ -11,48 +11,52 @@
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4 flex items-center justify-between gap-2">
 
             <!-- Left: Logo + Title -->
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-10 h-10 object-contain" />
-                <h1 class="text-lg font-semibold text-gray-800">
-                    Class Election Voting System
+            <a href="{{ route('welcome') }}" class="flex items-center gap-2.5 sm:gap-3 shrink-0">
+                <img src="{{ asset('images/Aces.png') }}" alt="Voting Logo" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0" />
+                <h1 class="text-sm sm:text-base md:text-lg font-bold text-gray-800 tracking-tight leading-tight">
+                    <span class="hidden sm:inline">Class Election </span>Voting System
                 </h1>
-            </div>
+            </a>
 
             <!-- Right: Auth Links -->
-            <div class="flex items-center gap-4 sm:gap-6">
+            <div class="flex items-center gap-2 sm:gap-4 shrink-0">
                 @auth
-                    <span class="text-gray-700 text-sm hidden sm:inline">Welcome, <strong>{{ auth()->user()->username }}</strong></span>
+                    <span class="text-gray-600 text-xs sm:text-sm hidden md:inline">
+                        Welcome, <strong>{{ auth()->user()->username }}</strong>
+                    </span>
 
                     @if (auth()->user()->role == \App\Enums\Role::ADMIN)
                         <a href="{{ route('admin-index') }}"
-                            class="text-gray-700 text-sm font-medium hover:text-blue-600 transition">
-                            Admin Dashboard
+                            class="px-2.5 py-1.5 sm:px-3 sm:py-1.5 text-xs sm:text-sm font-medium bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg transition whitespace-nowrap">
+                            Dashboard
                         </a>
                     @else
                         <a href="{{ route('vote-index') }}"
-                            class="text-gray-700 text-sm font-medium hover:text-blue-600 transition">
+                            class="px-3 py-1.5 text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition shadow-sm whitespace-nowrap">
                             Vote
                         </a>
                     @endif
 
                     <form method="POST" action="{{ route('logout-auth') }}" class="inline">
                         @csrf
-                        <button type="submit" class="text-gray-700 text-sm font-medium hover:text-red-600 transition">
+                        <button type="submit"
+                            class="px-2 py-1.5 text-xs sm:text-sm font-medium text-gray-500 hover:text-red-600 transition whitespace-nowrap">
                             Logout
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="text-gray-700 text-sm font-medium hover:text-blue-600 transition">
+                    <a href="{{ route('login') }}"
+                        class="px-2.5 py-1.5 text-xs sm:text-sm font-medium text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
                         Login
                     </a>
 
                     @if (\App\Models\Setting::isRegistrationOpen())
                         <a href="{{ route('register-index') }}"
-                            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition shadow-sm">
+                            class="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold rounded-lg transition shadow-sm whitespace-nowrap">
                             Register
                         </a>
                     @endif
