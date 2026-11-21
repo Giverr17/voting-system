@@ -22,10 +22,6 @@ class SendOTP extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new \Illuminate\Mail\Mailables\Address(
-                'contact@aces-portal.com',
-                'Aces Portal'
-            ),
             subject: 'Your Voting Entry Password',
         );
     }
